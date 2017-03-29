@@ -1,1 +1,9 @@
-psycopg2=>2.5+
+django>=1.10.6
+psycopg2>=2.5
+django-secure
+django-model-utils
+django-debug-toolbar
+South
+django-redis-cache
+django-waffle
+requests
