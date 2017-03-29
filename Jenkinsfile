@@ -3,7 +3,7 @@ node('dko-personal') {
     stage('Build') {
         echo 'Building..'
         checkout scm
-        sh """
+        sh '''
             # Get an unique venv folder to using *inside* workspace
             VENV=".venv-$BUILD_NUMBER"
 
@@ -15,16 +15,16 @@ node('dko-personal') {
 
             #install requirements
             pip install -r requirements.txt
-            python manage.py migrate    # Apply South's database migrations
+            python manage.py migrate    # Apply Souths database migrations
             python manage.py compilemessages          # Create translation files
             python manage.py collectstatic --noinput  # Collect static files
-        """
+        '''
     }
     stage('Test') {
-        sh """
+        sh '''
             PS1="${PS1:-}" source "$VENV/bin/activate"
             python manage.py test --noinput
-        """
+        '''
     }
     stage('Deploy') {
         if (! fileExists '/webapps/$JOB_NAME') {
