@@ -14,7 +14,7 @@ node('dko-personal') {
             PS1="${PS1:-}" source "$VENV/bin/activate"
 
             #install requirements
-            pip install -r requirements.txt
+            pip3 install -r requirements.txt
             python manage.py migrate    # Apply Souths database migrations
             python manage.py compilemessages          # Create translation files
             python manage.py collectstatic --noinput  # Collect static files
@@ -46,7 +46,7 @@ node('dko-personal') {
             sh '''
                 PS1="${PS1:-}" source "/webapps/$JOB_NAME/.venv/bin/activate"
                 #install requirements
-                pip install -r requirements.txt
+                pip3 install -r requirements.txt
                 python manage.py migrate                  # Apply Souths database migrations
                 python manage.py compilemessages          # Create translation files
                 python manage.py collectstatic --noinput  # Collect static files
