@@ -27,7 +27,7 @@ node('dko-personal') {
         '''
     }
     stage('Deploy') {
-        if (! fileExists '/webapps/$JOB_NAME') {
+        if (! fileExists('/webapps/$JOB_NAME')) {
             sh '''
                 mkdir -p "/webapps/$JOB_NAME"
                 virtualenv "/webapps/$JOB_NAME/.venv"
