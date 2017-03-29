@@ -7,3 +7,4 @@ South
 django-redis-cache
 django-waffle
 requests
+paho-mqtt>=1.2
