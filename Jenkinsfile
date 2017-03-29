@@ -11,7 +11,7 @@ node('dko-personal') {
             virtualenv "$VENV"
 
             # Update pip
-            PS1="${PS1:-}" source "$VENV/bin/activate"
+            PS1="${PS1:-}" . "$VENV/bin/activate"
 
             #install requirements
             pip3 install -r requirements.txt
@@ -22,7 +22,7 @@ node('dko-personal') {
     }
     stage('Test') {
         sh '''
-            PS1="${PS1:-}" source "$VENV/bin/activate"
+            PS1="${PS1:-}" . "$VENV/bin/activate"
             python manage.py test --noinput
         '''
     }
@@ -44,7 +44,7 @@ node('dko-personal') {
             // some block
             git 'https://github.com/dejwoo/xp_project'
             sh '''
-                PS1="${PS1:-}" source "/webapps/$JOB_NAME/.venv/bin/activate"
+                PS1="${PS1:-}" . "/webapps/$JOB_NAME/.venv/bin/activate"
                 #install requirements
                 pip3 install -r requirements.txt
                 python manage.py migrate                  # Apply Souths database migrations
