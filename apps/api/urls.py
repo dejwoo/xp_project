@@ -5,10 +5,10 @@ from apps.api.views import UserListViewSet, SwarmListViewSet, NodeListViewSet, G
 from . import views
 
 router = DefaultRouter()
-router.register(r'users', UserListViewSet)
-router.register(r'gatewayw', GatewayListViewSet)
-router.register(r'nodes', NodeListViewSet)
-router.register(r'swatms', SwarmListViewSet)
+router.register(r'users', UserListViewSet, 'Users')
+router.register(r'gatewayw', GatewayListViewSet, 'Gateways')
+router.register(r'nodes', NodeListViewSet, 'Nodes')
+router.register(r'swarms', SwarmListViewSet, 'Swarms')
 
 urlpatterns = [
     url(r'^', include(router.urls)),
