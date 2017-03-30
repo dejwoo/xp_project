@@ -12,7 +12,7 @@ router.register(r'swarms', SwarmListViewSet, 'Swarms')
 
 urlpatterns = [
     url(r'^', include(router.urls)),
-    url(r'^$', views.IndexView.as_view, name='index'),
+    url(r'^$', views.IndexView.as_view(), name='index'),
 
     url(r'^gateway/(?P<pk>[0-9]+)$', views.GatewayView.as_view(), name='gateway'),
     url(r'^gateway/(?P<pk>[0-9]+)/data$', views.GatewayDataView.as_view(), name='gatewayData'),
