@@ -8,3 +8,6 @@ django-redis-cache
 django-waffle
 requests
 paho-mqtt>=1.2
+djangorestframework
+django-filter
+markdown
