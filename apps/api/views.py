@@ -34,8 +34,10 @@ class UserListViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
 
+
 class UserView(GenericAPIView):
     pass
+
 
 class UserDataView(GenericAPIView):
     pass
