@@ -6,7 +6,7 @@ from . import views
 
 router = DefaultRouter()
 router.register(r'users', UserListViewSet, 'Users')
-router.register(r'gatewayw', GatewayListViewSet, 'Gateways')
+router.register(r'gateway', GatewayListViewSet, 'Gateways')
 router.register(r'nodes', NodeListViewSet, 'Nodes')
 router.register(r'swarms', SwarmListViewSet, 'Swarms')
 
