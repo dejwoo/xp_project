@@ -1,38 +1,45 @@
-from rest_framework import mixins
-from rest_framework.generics import CreateAPIView, ListCreateAPIView, GenericAPIView
-from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.viewsets import ViewSet
+from rest_framework import authentication, permissions, viewsets
+from apps.api.models import User, UserSerializer
 
 
-class IndexView(CreateAPIView):
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = "api/index.html"
+"""
+View to list all users in the system.
 
-    def get(self, request, *args, **kwargs):
-        context = {
-            'some_dynamic_value': 'This text comes from django view!',
-        }
-        return Response(context)
+* Requires token authentication.
+* Only admin users are able to access this view.
+"""
+class UserListViewSet(viewsets.ModelViewSet):
+    """
+    A simple ViewSet for viewing and editing accounts.
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
-    def post(self, request, *args, **kwargs):
-        pass
+    # def list(self, request, *args, **kwargs):
+    #     return super().list(request, *args, **kwargs)
 
+    # def destroy(self, request, *args, **kwargs):
+    #     return super().destroy(request, *args, **kwargs)
 
-class UserListViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,
-                      mixins.DestroyModelMixin, mixins.UpdateModelMixin,
-                      GenericAPIView):
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+    # def update(self, request, *args, **kwargs):
+    #     return super().update(request, *args, **kwargs)
 
-    def destroy(self, request, *args, **kwargs):
-        return super().destroy(request, *args, **kwargs)
+    # def create(self, request, *args, **kwargs):
+    #     return super().create(request, *args, **kwargs)
+# class IndexView(CreateAPIView):
+#   renderer_classes = [TemplateHTMLRenderer]
+#   template_name = "api/index.html"
 
-    def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
+#   def get(self, request, *args, **kwargs):
+#       context = {
+#       'some_dynamic_value': 'This text comes from django view!',
+#       }
+#       return Response(context)
 
-    def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
+#   def post(self, request, *args, **kwargs):
+#       pass
 
 
 class UserView(GenericAPIView):
@@ -42,50 +49,56 @@ class UserView(GenericAPIView):
 class UserDataView(GenericAPIView):
     pass
 
+# class UserView(GenericAPIView):
+#     pass
 
-class GatewayListViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,
-                         mixins.DestroyModelMixin, mixins.UpdateModelMixin,
-                         GenericAPIView):
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
-
-    def destroy(self, request, *args, **kwargs):
-        return super().destroy(request, *args, **kwargs)
-
-    def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
-
-    def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
+# class UserDataView(GenericAPIView):
+#     pass
 
 
-class NodeListViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,
-                      mixins.DestroyModelMixin, mixins.UpdateModelMixin,
-                      GenericAPIView):
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+# class GatewayListViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,
+#                          mixins.DestroyModelMixin, mixins.UpdateModelMixin,
+#                          GenericAPIView):
+#     def list(self, request, *args, **kwargs):
+#         return super().list(request, *args, **kwargs)
 
-    def destroy(self, request, *args, **kwargs):
-        return super().destroy(request, *args, **kwargs)
+#     def destroy(self, request, *args, **kwargs):
+#         return super().destroy(request, *args, **kwargs)
 
-    def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
+#     def update(self, request, *args, **kwargs):
+#         return super().update(request, *args, **kwargs)
 
-    def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
+#     def create(self, request, *args, **kwargs):
+#         return super().create(request, *args, **kwargs)
 
 
-class SwarmListViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,
-                       mixins.DestroyModelMixin, mixins.UpdateModelMixin,
-                       GenericAPIView):
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+# class NodeListViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,
+#                       mixins.DestroyModelMixin, mixins.UpdateModelMixin,
+#                       GenericAPIView):
+#     def list(self, request, *args, **kwargs):
+#         return super().list(request, *args, **kwargs)
 
-    def destroy(self, request, *args, **kwargs):
-        return super().destroy(request, *args, **kwargs)
+#     def destroy(self, request, *args, **kwargs):
+#         return super().destroy(request, *args, **kwargs)
 
-    def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
+#     def update(self, request, *args, **kwargs):
+#         return super().update(request, *args, **kwargs)
 
-    def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
+#     def create(self, request, *args, **kwargs):
+#         return super().create(request, *args, **kwargs)
+
+
+# class SwarmListViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,
+#                        mixins.DestroyModelMixin, mixins.UpdateModelMixin,
+#                        GenericAPIView):
+#     def list(self, request, *args, **kwargs):
+#         return super().list(request, *args, **kwargs)
+
+#     def destroy(self, request, *args, **kwargs):
+#         return super().destroy(request, *args, **kwargs)
+
+#     def update(self, request, *args, **kwargs):
+#         return super().update(request, *args, **kwargs)
+
+#     def create(self, request, *args, **kwargs):
+#         return super().create(request, *args, **kwargs)
