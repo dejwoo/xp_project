@@ -121,7 +121,7 @@ class TxInfoSerializer(serializers.ModelSerializer):
 #   "nodeName": "sensor",
 #   "frequency": 868500000
 
-class Data(models.Model):
+class Message(models.Model):
     applicationName = models.CharField(max_length=100)
     applicationID = models.UUIDField()
     devEUI = models.UUIDField()
