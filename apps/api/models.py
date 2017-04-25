@@ -62,12 +62,70 @@ class SwarmSerializer(serializers.ModelSerializer):
         model = Swarm
 
 
+# {
+#   "applicationID": "bd60ba7f-a94e-466c-a26f-ea2d5e517173",
+#   "applicationName": "wind-sensor",
+#   "data": 532.9433,
+#   "devEUI": "87832a8a-7c05-4568-bef5-9e81b44d282f",
+#   "fCnt": 25,
+#   "fPort": 1,
+#   "nodeName": "sensor",
+#   "frequency": 868500000
+
 class DataModel(models.Model):
+    applicationName = models.CharField(max_length=100)
+    applicationID = models.UUIDField()
+    devEUI = models.UUIDField()
+    nodeName = models.CharField(max_length=100),
+    data = models.Textfield()
+    fCnt = models.IntegerField()
+    fPort = models.IntegerField()
+    frequency = models.IntegerField()
     gateway = models.ForeignKey(Gateway)
     node = models.ForeignKey(Node)
-    timestamp = models.DateTimeField()
+    timestamp = models.DateTimeField(auto_now=true)
     value = models.CharField(max_length=100)
+    rxInfo = models.ForeignKey();
+    txInfo = models.ForeignKey();
 
+# "rxInfo": [
+#     {
+#       "altitude": 1845,
+#       "latitude": 27.7452,
+#       "loRaSNR": 18,
+#       "longitude": 14.5545,
+#       "mac": "a8911506-23b1-4b0f-b333-3ad5ce4d3d24",
+#       "name": "gateway",
+#       "rssi": -44,
+#       "time": "2002-05-27T06:01:09.000Z"
+#     }
+#   ],
+class RxInfo(models.Model):
+    altitude = models.IntegerField()
+    latitude = models.FloatField()
+    loRaSNR = models.IntegerField()
+    longitude = models.FloatField()
+    mac = models.UUIDField()
+    name = models.CharField(max_length=100)
+    rssi = models.IntegerField()
+    time = model.DateTimeField()
+
+#   "txInfo": {
+#     "adr": false,
+#     "codeRate": "4/8",
+#     "dataRate": {
+#       "bandwidth": 5,
+#       "modulation": "LORA",
+#       "spreadFactor": 12
+#     }
+#   }
+# }
+class TxInfo(models.Model):
+    adr = models.BooleanField()
+    codeRate = models.CharField(max_length=10)
+    bandwidth = models.IntegerField()
+    modulation = models.CharField(max_length=10)
+    spreadFactor = models.IntegerField()
 
 class ErrorModel(models.Model):
     type = models.CharField(max_length=100)

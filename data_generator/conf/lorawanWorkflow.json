@@ -40,11 +40,11 @@
             "config": [{
                 "applicationID": "uuid()",
                 "applicationName": "wind-sensor",
-                "nodeName": "stringMerge(_,sensor,this.altitude)",
+                "nodeName": "random('sensor_1', 'sensor_2', 'sensor_3', 'sensor_4', 'sensor_5', 'sensor_6', 'sensor_7', 'sensor_8', 'sensor_9', 'sensor_10', 'sensor_11', 'sensor_12', 'sensor_13', 'sensor_14', 'sensor_15', 'sensor_16', 'sensor_17', 'sensor_18', 'sensor_19', 'sensor_20', 'sensor_21', 'sensor_22', 'sensor_23', 'sensor_24', 'sensor_25', 'sensor_26', 'sensor_27', 'sensor_28', 'sensor_29', 'sensor_30')",
                 "devEUI": "uuid()",
                 "rxInfo": [{
                     "mac": "uuid()",
-                    "name": "stringMerge(_,gateway,this.fPort)",
+                    "name": "random('gateway_1', 'gateway_2', 'gateway_3', 'gateway_4')",
                     "latitude": "double(-90,90)",
                     "longitude": "double(-180,180)",
                     "altitude": "long(0,3000)",
@@ -72,11 +72,11 @@
             "config": [{
                 "applicationID": "uuid()",
                 "applicationName": "humidity-sensor",
-                "nodeName": "stringMerge(_,sensor,this.altitude)",
+                "nodeName": "random('sensor_1', 'sensor_2', 'sensor_3', 'sensor_4', 'sensor_5', 'sensor_6', 'sensor_7', 'sensor_8', 'sensor_9', 'sensor_10', 'sensor_11', 'sensor_12', 'sensor_13', 'sensor_14', 'sensor_15', 'sensor_16', 'sensor_17', 'sensor_18', 'sensor_19', 'sensor_20', 'sensor_21', 'sensor_22', 'sensor_23', 'sensor_24', 'sensor_25', 'sensor_26', 'sensor_27', 'sensor_28', 'sensor_29', 'sensor_30')",
                 "devEUI": "uuid()",
                 "rxInfo": [{
                     "mac": "uuid()",
-                    "name": "stringMerge(_,gateway,this.fPort)",
+                    "name": "random('gateway_1', 'gateway_2', 'gateway_3', 'gateway_4')",
                     "latitude": "double(-90,90)",
                     "longitude": "double(-180,180)",
                     "altitude": "long(0,3000)",
