@@ -1,15 +1,13 @@
-import django.dispatch
+from django.dispatch import Signal
 import paho.mqtt.client as mqtt
 import os
 import json
-
-
 
 class MqttClient(object):
     """docstring for MqttClient"""
     def __init__(self):
         super(MqttClient, self).__init__()
-        self.signal = django.dispatch.Signal(providing_args=["message", "txInfo", "rxInfo"])
+        self.signal = Signal(providing_args=["message", "txInfo", "rxInfo"])
         self.client = mqtt.Client(transport="tcp")
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
@@ -22,12 +20,14 @@ class MqttClient(object):
     def on_message(self, client, userdata, message):
         try:
             payload = json.loads(message.payload.decode('utf-8'))
-            self.signal.send(payload) #, payload['txInfo'], payload['rxInfo']
-            print(json.dumps(payload, indent=2))
+            txInfo = payload['txInfo']
+            rxInfo = payload['rxInfo']
+            message = dict((key,value) for key, value in payload.items() if key not in ['txInfo','rxInfo'])
+            self.signal.send(sender=self.__class__, message=message,txInfo=txInfo,rxInfo=rxInfo) #, payload['txInfo'], payload['rxInfo']
             client.publish('response', payload="Message recieved Capitain!")
         except (ValueError, KeyError, TypeError) as e:
-            print("JSON format error:\n", message.payload.decode('utf-8'),"\t->\t", e,)
+            print("JSON format error:\n", message.decode('utf-8'),"\t->\t", e,)
     def exit(self):
         self.loop_end();
     def reset(self):
-            self.reinitialise();
+        self.reinitialise();

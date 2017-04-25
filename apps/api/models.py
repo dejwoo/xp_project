@@ -104,6 +104,7 @@ class TxInfo(models.Model):
     bandwidth = models.IntegerField()
     modulation = models.CharField(max_length=10)
     spreadFactor = models.IntegerField()
+    frequency = models.IntegerField()
 
 class TxInfoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -129,13 +130,14 @@ class Message(models.Model):
     data = models.TextField()
     fCnt = models.IntegerField()
     fPort = models.IntegerField()
-    frequency = models.IntegerField()
     gateway = models.ForeignKey(Gateway)
     node = models.ForeignKey(Node)
     timestamp = models.DateTimeField(auto_now=True)
-    value = models.CharField(max_length=100)
     rxInfo = models.ForeignKey(RxInfo);
     txInfo = models.ForeignKey(TxInfo);
+
+    def __str__(self):
+        return str(self.__dict__)
 
 class DataSerializer(serializers.ModelSerializer):
     class Meta:
