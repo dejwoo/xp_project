@@ -62,32 +62,6 @@ class SwarmSerializer(serializers.ModelSerializer):
         model = Swarm
 
 
-# {
-#   "applicationID": "bd60ba7f-a94e-466c-a26f-ea2d5e517173",
-#   "applicationName": "wind-sensor",
-#   "data": 532.9433,
-#   "devEUI": "87832a8a-7c05-4568-bef5-9e81b44d282f",
-#   "fCnt": 25,
-#   "fPort": 1,
-#   "nodeName": "sensor",
-#   "frequency": 868500000
-
-class DataModel(models.Model):
-    applicationName = models.CharField(max_length=100)
-    applicationID = models.UUIDField()
-    devEUI = models.UUIDField()
-    nodeName = models.CharField(max_length=100),
-    data = models.Textfield()
-    fCnt = models.IntegerField()
-    fPort = models.IntegerField()
-    frequency = models.IntegerField()
-    gateway = models.ForeignKey(Gateway)
-    node = models.ForeignKey(Node)
-    timestamp = models.DateTimeField(auto_now=true)
-    value = models.CharField(max_length=100)
-    rxInfo = models.ForeignKey();
-    txInfo = models.ForeignKey();
-
 # "rxInfo": [
 #     {
 #       "altitude": 1845,
@@ -108,7 +82,11 @@ class RxInfo(models.Model):
     mac = models.UUIDField()
     name = models.CharField(max_length=100)
     rssi = models.IntegerField()
-    time = model.DateTimeField()
+    time = models.DateTimeField()
+
+class RxInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RxInfo
 
 #   "txInfo": {
 #     "adr": false,
@@ -126,6 +104,44 @@ class TxInfo(models.Model):
     bandwidth = models.IntegerField()
     modulation = models.CharField(max_length=10)
     spreadFactor = models.IntegerField()
+
+class TxInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TxInfo
+
+
+
+# {
+#   "applicationID": "bd60ba7f-a94e-466c-a26f-ea2d5e517173",
+#   "applicationName": "wind-sensor",
+#   "data": 532.9433,
+#   "devEUI": "87832a8a-7c05-4568-bef5-9e81b44d282f",
+#   "fCnt": 25,
+#   "fPort": 1,
+#   "nodeName": "sensor",
+#   "frequency": 868500000
+
+class Data(models.Model):
+    applicationName = models.CharField(max_length=100)
+    applicationID = models.UUIDField()
+    devEUI = models.UUIDField()
+    nodeName = models.CharField(max_length=100),
+    data = models.TextField()
+    fCnt = models.IntegerField()
+    fPort = models.IntegerField()
+    frequency = models.IntegerField()
+    gateway = models.ForeignKey(Gateway)
+    node = models.ForeignKey(Node)
+    timestamp = models.DateTimeField(auto_now=True)
+    value = models.CharField(max_length=100)
+    rxInfo = models.ForeignKey(RxInfo);
+    txInfo = models.ForeignKey(TxInfo);
+
+class DataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Data
+
+
 
 class ErrorModel(models.Model):
     type = models.CharField(max_length=100)
