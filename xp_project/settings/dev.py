@@ -25,5 +25,5 @@ DATABASES = {
 
 INSTALLED_APPS = DEFAULT_APPS + [
     "apps.api",
-    "web"
+    "apps.web"
 ]

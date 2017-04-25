@@ -139,7 +139,7 @@ class Message(models.Model):
 
 class DataSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Data
+        model = Message
 
 
 
