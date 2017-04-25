@@ -2,6 +2,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from rest_framework import serializers
 
+
 # Create your models here.
 
 class User(models.Model):
@@ -12,6 +13,7 @@ class User(models.Model):
     last_name = models.CharField(max_length=100)
     nodes = models.ForeignKey('Node', null=False)
     registered = models.CharField(max_length=100)
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,6 +26,13 @@ class Gateway(models.Model):
     mac = models.CharField(max_length=100)
     serial = models.CharField(max_length=100)
 
+
+class GatewaySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Gateway
+
+
+
 class Node(models.Model):
     app_eui = models.CharField(max_length=100)
     app_key = models.CharField(max_length=100)
@@ -35,11 +44,11 @@ class Node(models.Model):
     type = models.CharField(max_length=100)
 
 
-class DataModel(models.Model):
-    gateway = models.ForeignKey(Gateway)
-    node = models.ForeignKey(Node)
-    timestamp = models.DateTimeField()
-    value = models.CharField(max_length=100)
+
+class NodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Node
+
 
 
 class Swarm(models.Model):
@@ -47,6 +56,17 @@ class Swarm(models.Model):
     last_seen = models.DateTimeField()
     name = models.CharField(max_length=100)
     nodes = models.ForeignKey(Node)
+
+class SwarmSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Swarm
+
+
+class DataModel(models.Model):
+    gateway = models.ForeignKey(Gateway)
+    node = models.ForeignKey(Node)
+    timestamp = models.DateTimeField()
+    value = models.CharField(max_length=100)
 
 
 class ErrorModel(models.Model):

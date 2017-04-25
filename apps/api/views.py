@@ -1,15 +1,22 @@
-from rest_framework.views import APIView
+from rest_framework.generics import CreateAPIView
+from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
-from rest_framework import authentication, permissions, viewsets
-from apps.api.models import User, UserSerializer
+from rest_framework import viewsets
+from apps.api.models import *
 
 
-"""
-View to list all users in the system.
+class IndexView(CreateAPIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = "api/index.html"
 
-* Requires token authentication.
-* Only admin users are able to access this view.
-"""
+    def get(self, request, *args, **kwargs):
+        context = {'some_dynamic_value': 'This text comes from django view!', }
+        return Response(context)
+
+    def post(self, request, *args, **kwargs):
+        pass
+
+
 class UserListViewSet(viewsets.ModelViewSet):
     """
     A simple ViewSet for viewing and editing accounts.
@@ -17,82 +24,17 @@ class UserListViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-    # def list(self, request, *args, **kwargs):
-    #     return super().list(request, *args, **kwargs)
 
-    # def destroy(self, request, *args, **kwargs):
-    #     return super().destroy(request, *args, **kwargs)
-
-    # def update(self, request, *args, **kwargs):
-    #     return super().update(request, *args, **kwargs)
-
-    # def create(self, request, *args, **kwargs):
-    #     return super().create(request, *args, **kwargs)
-# class IndexView(CreateAPIView):
-#   renderer_classes = [TemplateHTMLRenderer]
-#   template_name = "api/index.html"
-
-#   def get(self, request, *args, **kwargs):
-#       context = {
-#       'some_dynamic_value': 'This text comes from django view!',
-#       }
-#       return Response(context)
-
-#   def post(self, request, *args, **kwargs):
-#       pass
+class GatewayListViewSet(viewsets.ModelViewSet):
+    queryset = Gateway.objects.all()
+    serializer_class = GatewaySerializer
 
 
-
-# class UserView(GenericAPIView):
-#     pass
-
-# class UserDataView(GenericAPIView):
-#     pass
+class NodeListViewSet(viewsets.ModelViewSet):
+    queryset = Node.objects.all()
+    serializer_class = NodeSerializer
 
 
-# class GatewayListViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,
-#                          mixins.DestroyModelMixin, mixins.UpdateModelMixin,
-#                          GenericAPIView):
-#     def list(self, request, *args, **kwargs):
-#         return super().list(request, *args, **kwargs)
-
-#     def destroy(self, request, *args, **kwargs):
-#         return super().destroy(request, *args, **kwargs)
-
-#     def update(self, request, *args, **kwargs):
-#         return super().update(request, *args, **kwargs)
-
-#     def create(self, request, *args, **kwargs):
-#         return super().create(request, *args, **kwargs)
-
-
-# class NodeListViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,
-#                       mixins.DestroyModelMixin, mixins.UpdateModelMixin,
-#                       GenericAPIView):
-#     def list(self, request, *args, **kwargs):
-#         return super().list(request, *args, **kwargs)
-
-#     def destroy(self, request, *args, **kwargs):
-#         return super().destroy(request, *args, **kwargs)
-
-#     def update(self, request, *args, **kwargs):
-#         return super().update(request, *args, **kwargs)
-
-#     def create(self, request, *args, **kwargs):
-#         return super().create(request, *args, **kwargs)
-
-
-# class SwarmListViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,
-#                        mixins.DestroyModelMixin, mixins.UpdateModelMixin,
-#                        GenericAPIView):
-#     def list(self, request, *args, **kwargs):
-#         return super().list(request, *args, **kwargs)
-
-#     def destroy(self, request, *args, **kwargs):
-#         return super().destroy(request, *args, **kwargs)
-
-#     def update(self, request, *args, **kwargs):
-#         return super().update(request, *args, **kwargs)
-
-#     def create(self, request, *args, **kwargs):
-#         return super().create(request, *args, **kwargs)
+class SwarmListViewSet(viewsets.ModelViewSet):
+    queryset = Swarm.objects.all()
+    serializer_class = SwarmSerializer
