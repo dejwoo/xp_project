@@ -1,3 +1,4 @@
+from rest_framework.decorators import detail_route
 from rest_framework.generics import CreateAPIView
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
@@ -23,6 +24,10 @@ class UserListViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    @detail_route(methods=['get'])
+    def data(self, request, pk=None):
+        user = self.get_object()
 
 
 class GatewayListViewSet(viewsets.ModelViewSet):

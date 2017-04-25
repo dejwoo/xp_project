@@ -19,6 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
 
+
 class Gateway(models.Model):
     gps_lat = models.FloatField()
     gps_lon = models.FloatField()
@@ -32,7 +33,6 @@ class GatewaySerializer(serializers.ModelSerializer):
         model = Gateway
 
 
-
 class Node(models.Model):
     app_eui = models.CharField(max_length=100)
     app_key = models.CharField(max_length=100)
@@ -44,11 +44,9 @@ class Node(models.Model):
     type = models.CharField(max_length=100)
 
 
-
 class NodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Node
-
 
 
 class Swarm(models.Model):
@@ -56,6 +54,7 @@ class Swarm(models.Model):
     last_seen = models.DateTimeField()
     name = models.CharField(max_length=100)
     nodes = models.ForeignKey(Node)
+
 
 class SwarmSerializer(serializers.ModelSerializer):
     class Meta:

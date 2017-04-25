@@ -7,7 +7,9 @@
     <title>Django Boilerplate</title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-
+    {% include 'material/includes/material_css.html' %}
+    <script src="{% static 'material/js/jquery-2.2.0.js' %}"></script>
+    {% include 'material/includes/material_js.html' %}
     <link rel="stylesheet" href="{% static "css/style.css" %}">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->

@@ -41,6 +41,10 @@ sys.path.append(normpath(join(PROJECT_ROOT, 'apps')))
 
 # This are the apps
 DEFAULT_APPS = [
+    'material',
+    'material.frontend',
+    'material.admin',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,6 +54,7 @@ DEFAULT_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
+
 ]
 
 # Middlewares
@@ -78,7 +83,8 @@ TEMPLATES = [
                 'django.template.context_processors.media',
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
-                'django.contrib.messages.context_processors.messages'
+                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
