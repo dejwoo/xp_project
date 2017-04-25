@@ -83,9 +83,11 @@ class RxInfo(models.Model):
     rssi = models.IntegerField()
     time = models.DateTimeField()
 
+
 class RxInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = RxInfo
+
 
 #   "txInfo": {
 #     "adr": false,
@@ -104,10 +106,10 @@ class TxInfo(models.Model):
     modulation = models.CharField(max_length=10)
     spreadFactor = models.IntegerField()
 
+
 class TxInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = TxInfo
-
 
 
 # {
@@ -136,10 +138,10 @@ class Message(models.Model):
     rxInfo = models.ForeignKey(RxInfo);
     txInfo = models.ForeignKey(TxInfo);
 
-class DataSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Data
 
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
 
 
 class ErrorModel(models.Model):
