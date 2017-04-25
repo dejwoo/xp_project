@@ -1,0 +1,15 @@
+{
+    "workflows": [{
+        "workflowName": "test",
+        "workflowFilename": "exampleWorkflow.json"
+    }],
+    "producers": [
+    	{
+    		"type": "mqtt",
+    		"broker.server": "tcp://dejwoo.com",
+   			"broker.port": 13881,
+    		"topic": "data",
+    		"clientId": "SampleData",
+    		"qos":0
+    	}]
+}
