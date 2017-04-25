@@ -1,5 +1,5 @@
 # Import some utility functions
-from os.path import join
+import os
 # Fetch our common settings
 from xp_project.settings.common import *
 
@@ -12,7 +12,11 @@ DEBUG = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': "xp_project",
+        'USER': os.environ.get("POSTGRESQL_USER"),
+        'PASSWORD': os.environ.get("POSTGRESQL_PASSWORD"),
+        'HOST': os.environ.get("POSTGRESQL_HOST"),
+        'PORT': os.environ.get("POSTGRESQL_PORT"),
+        'NAME': os.environ.get("POSTGRESQL_DBNAME")
     }
 }
 
@@ -20,6 +24,6 @@ DATABASES = {
 
 
 INSTALLED_APPS = DEFAULT_APPS + [
-    "api",
+    "apps.api",
     "web"
 ]
