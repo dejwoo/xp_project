@@ -35,6 +35,10 @@ class UserViewSet(viewsets.ModelViewSet):
         # allow non-authenticated user to create via POST
         return (AllowAny() if self.request.method == 'POST' else IsStaffOrTargetUser()),
 
+    @detail_route(methods=['get'])
+    def data(self, request, pk=None):
+        user = self.get_object()
+
 
 class GatewayListViewSet(viewsets.ModelViewSet):
     queryset = Gateway.objects.all()
