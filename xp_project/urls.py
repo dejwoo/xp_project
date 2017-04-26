@@ -7,5 +7,6 @@ from apps.web import urls as web_urls
 urlpatterns = (
     url(r'', include(web_urls)),
     url(r'api/', include(api_urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^admin/', include(admin.site.urls)),
 )

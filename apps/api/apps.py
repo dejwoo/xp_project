@@ -44,6 +44,6 @@ class ApiConfig(AppConfig):
         newMessage.txInfo = newTxInfo
         newMessage.rxInfo = newRxInfo
         newMessage.save()
-        print("Message", newMessage)
-        print("TxInfo", newTxInfo)
-        print("RxInfo", newRxInfo)
+        #print("Message", newMessage)
+        #print("TxInfo", newTxInfo)
+        #print("RxInfo", newRxInfo)
