@@ -36,11 +36,11 @@ PROJECT_TEMPLATES = [
 # Add apps/ to the Python path
 sys.path.append(normpath(join(PROJECT_ROOT, 'apps')))
 
-
 # ##### APPLICATION CONFIGURATION #########################
 
 # This are the apps
 DEFAULT_APPS = [
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,6 +50,8 @@ DEFAULT_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
+    'django_extensions',
+
 ]
 
 # Middlewares
@@ -78,12 +80,12 @@ TEMPLATES = [
                 'django.template.context_processors.media',
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
-                'django.contrib.messages.context_processors.messages'
+                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
 ]
-
 
 # ##### SECURITY CONFIGURATION ############################
 
@@ -93,10 +95,11 @@ SECRET_FILE = normpath(join(PROJECT_ROOT, 'run', 'SECRET.key'))
 
 # These persons receive error notification
 ADMINS = (
-    ('your name', 'your_name@example.com'),
+    ('David Koszeghy', 'your_name@example.com'),
+    ('Akos Hervay', 'your_name@example.com'),
+
 )
 MANAGERS = ADMINS
-
 
 # ##### REST FRAMEWORK CONFIGURATION ############################
 
@@ -145,10 +148,8 @@ STATIC_URL = '/static/'
 # The URL for media files
 MEDIA_URL = '/media/'
 
-
 # ##### DEBUG CONFIGURATION ###############################
 DEBUG = False
-
 
 # ##### INTERNATIONALIZATION ##############################
 
@@ -164,13 +165,13 @@ USE_L10N = True
 # enable timezone awareness by default
 USE_TZ = True
 
-
 # Finally grab the SECRET KEY
 try:
     SECRET_KEY = open(SECRET_FILE).read().strip()
 except IOError:
     try:
         from django.utils.crypto import get_random_string
+
         chars = 'abcdefghijklmnopqrstuvwxyz0123456789!$%&()=+-_'
         SECRET_KEY = get_random_string(50, chars)
         with open(SECRET_FILE, 'w') as f:

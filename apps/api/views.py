@@ -1,7 +1,10 @@
+from rest_framework.decorators import detail_route
 from rest_framework.generics import CreateAPIView
+from rest_framework.permissions import AllowAny
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework import viewsets
+from apps.api.permissions import IsStaffOrTargetUser
 from apps.api.models import *
 
 
@@ -17,13 +20,21 @@ class IndexView(CreateAPIView):
         pass
 
 
-class UserListViewSet(viewsets.ModelViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     """
     A simple ViewSet for viewing and editing accounts.
     """
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
 
+    @detail_route(methods=['get'])
+    def data(self, request, pk=None):
+        user = self.get_object()
+
+    def get_permissions(self):
+        # allow non-authenticated user to create via POST
+        return (AllowAny() if self.request.method == 'POST' else IsStaffOrTargetUser()),
+    
 
 class GatewayListViewSet(viewsets.ModelViewSet):
     queryset = Gateway.objects.all()
