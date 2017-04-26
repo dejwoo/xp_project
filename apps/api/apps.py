@@ -21,20 +21,20 @@ class ApiConfig(AppConfig):
         dataRate = txInfo.pop('dataRate', None)
         newTxInfo = self.TxInfo(*txInfo)
         newRxInfo = self.RxInfo(*rxInfo)
-        # newMessage = self.Message(
-        #     applicationName = message.applicationName,
-        #     applicationID = message.applicationID,
-        #     devEUI = message.devEUI,
-        #     nodeName = message.nodeName,
-        #     data = message.data,
-        #     fCnt = message.fCnt,
-        #     fPort = message.fPort,
-        #     gateway = message.gateway,
-        #     node = message.node,
-        #     timestamp = message.timestamp,
-        #     rxInfo = message.rxInfo,
-        #     txInfo = message.txInfo)
-        # print("Message", newMessage)
-        print("Message data", message['data'])
+        newMessage = self.Message(
+            applicationName = message['applicationName'],
+            applicationID = message['applicationID'],
+            devEUI = message['devEUI'],
+            nodeName = message['nodeName'],
+            data = message['data'],
+            fCnt = message['fCnt'],
+            fPort = message['fPort'],
+            gateway = message['gateway'],
+            node = message['node'],
+            timestamp = message['timestamp'],
+            rxInfo = message['rxInfo'],
+            txInfo = message['txInfo'])
+        print("Message", newMessage)
+        # print("Message data", message['data'])
         # print("txInfo", newTxInfo)
         # print("rxInfo", newRxInfo)

@@ -14,7 +14,6 @@ class MqttClient(object):
         self.signal_count = False;
         self.client.username_pw_set(username=os.environ.get("MQTT_USERNAME"), password=os.environ.get("MQTT_PASSWORD"))
         self.client.connect(os.environ.get("MQTT_HOST"), int(os.environ.get("MQTT_PORT")), int(os.environ.get("MQTT_KEEPALIVE")))
-        self.client.loop_start()
     def getSignal(self):
         return self.signal
     def on_connect(self, client, userdata, flags, rc):
@@ -30,13 +29,13 @@ class MqttClient(object):
             self.signal.send(sender=self.__class__, message=message,txInfo=txInfo,rxInfo=rxInfo, signalCount=self.signal_count)
             client.publish('response', payload="Message recieved Capitain!")
         except (ValueError, KeyError, TypeError) as e:
-            print("JSON format error:\n", message,"\t->\t", e,)
+            print("JSON format error:\n", e)
     def exit(self):
         self.loop_end();
     def reset(self):
         self.client.loop_stop();
     def __exit__(self, exc_type, exc_value, traceback):
-        self.package_obj.cleanup()
+        self.exit()
     def signalRecieved(self, parity):
         if parity == self.signal_count:
             self.signal_count = not self.signal_count
