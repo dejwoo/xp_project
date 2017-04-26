@@ -15,7 +15,8 @@ class MqttClient(object):
         self.client.on_message = self.on_message
         self.signal_count = False
         self.client.username_pw_set(username=os.environ.get("MQTT_USERNAME"), password=os.environ.get("MQTT_PASSWORD"))
-        self.client.connect(os.environ.get("MQTT_HOST"), int(os.environ.get("MQTT_PORT")), int(os.environ.get("MQTT_KEEPALIVE")))
+        self.client.connect_async(os.environ.get("MQTT_HOST"), int(os.environ.get("MQTT_PORT")), int(os.environ.get("MQTT_KEEPALIVE")))
+        self.client.loop_start();
     def getSignal(self):
         return self.signal
 
@@ -27,22 +28,22 @@ class MqttClient(object):
     def on_message(self, client, userdata, message):
         try:
             payload = json.loads(message.payload.decode('utf-8'))
-            txInfo = payload['txInfo']
-            rxInfo = payload['rxInfo']
+            txInfo = payload.pop('txInfo')
+            if isinstance(txInfo, list):
+                txInfo = txInfo[0]
+            rxInfo = payload.pop('rxInfo')
+            if isinstance(rxInfo, list):
+                rxInfo = rxInfo[0]
             message = dict((key, value) for key, value in payload.items() if key not in ['txInfo', 'rxInfo'])
             self.signal_count = not self.signal_count
             self.signal.send(sender=self.__class__, message=message, txInfo=txInfo, rxInfo=rxInfo,
                              signalCount=self.signal_count)
             client.publish('response', payload="Message recieved Capitain!")
         except (ValueError, KeyError, TypeError) as e:
-            print("JSON format error:\n", message, "\t->\t", e, )
+            print("JSON error:\n",  e )
     def exit(self):
-        self.loop_end()
-
-    def reset(self):
         self.client.loop_stop()
-
-    def __exit__(self, exc_type, exc_value, traceback):
+    def __del__(self):
         self.exit()
     def signalRecieved(self, parity):
         if parity == self.signal_count:

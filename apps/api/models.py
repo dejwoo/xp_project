@@ -77,21 +77,21 @@ class SwarmSerializer(serializers.ModelSerializer):
 #   "nodeName": "sensor",
 #   "frequency": 868500000
 
-class Data(models.Model):
+class Message(models.Model):
     applicationName = models.CharField(max_length=100)
     applicationID = models.UUIDField()
     devEUI = models.UUIDField()
-    nodeName = models.CharField(max_length=100),
+    nodeName = models.CharField(max_length=100)
     data = models.TextField()
     fCnt = models.IntegerField()
     fPort = models.IntegerField()
-    frequency = models.IntegerField()
-    gateway = models.ForeignKey(Gateway)
-    node = models.ForeignKey(Node)
+    node = models.ForeignKey(Node, blank=True, null=True)
     timestamp = models.DateTimeField(auto_now=True)
-    value = models.CharField(max_length=100)
-    rxInfo = models.ForeignKey('RxInfo')
-    txInfo = models.ForeignKey('TxInfo')
+    rxInfo = models.ForeignKey('RxInfo', blank=True, null=True)
+    txInfo = models.ForeignKey('TxInfo', blank=True, null=True)
+
+    def __str__(self):
+        return str(self.__dict__)
 
 
 # "rxInfo": [
@@ -111,10 +111,14 @@ class RxInfo(models.Model):
     latitude = models.FloatField()
     loRaSNR = models.IntegerField()
     longitude = models.FloatField()
-    mac = models.UUIDField()
-    name = models.CharField(max_length=100)
+    gateway = models.ForeignKey(Gateway, blank=True, null=True)
+    gatwayMac = models.UUIDField()
+    gatwayName = models.CharField(max_length=100)
     rssi = models.IntegerField()
     time = models.DateTimeField()
+
+    def __str__(self):
+        return str(self.__dict__)
 
 
 class RxInfoSerializer(serializers.ModelSerializer):
@@ -140,43 +144,13 @@ class TxInfo(models.Model):
     spreadFactor = models.IntegerField(default=0)
     frequency = models.IntegerField(default=0)
 
-
-class TxInfoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TxInfo
-
-
-# {
-#   "applicationID": "bd60ba7f-a94e-466c-a26f-ea2d5e517173",
-#   "applicationName": "wind-sensor",
-#   "data": 532.9433,
-#   "devEUI": "87832a8a-7c05-4568-bef5-9e81b44d282f",
-#   "fCnt": 25,
-#   "fPort": 1,
-#   "nodeName": "sensor",
-#   "frequency": 868500000
-
-class Message(models.Model):
-    applicationName = models.CharField(max_length=100)
-    applicationID = models.UUIDField()
-    devEUI = models.UUIDField()
-    nodeName = models.CharField(max_length=100),
-    data = models.TextField()
-    fCnt = models.IntegerField()
-    fPort = models.IntegerField()
-    gateway = models.ForeignKey(Gateway)
-    node = models.ForeignKey(Node)
-    timestamp = models.DateTimeField(auto_now=True)
-    rxInfo = models.ForeignKey(RxInfo)
-    txInfo = models.ForeignKey(TxInfo)
-
     def __str__(self):
         return str(self.__dict__)
 
 
-class MessageSerializer(serializers.ModelSerializer):
+class TxInfoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Message
+        model = TxInfo
 
 
 class ErrorModel(models.Model):

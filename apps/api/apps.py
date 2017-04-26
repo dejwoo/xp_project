@@ -18,23 +18,32 @@ class ApiConfig(AppConfig):
         return
 
     def on_message_recieved(self, sender, message, txInfo, rxInfo, **kwargs):
-        dataRate = txInfo.pop('dataRate', None)
-        newTxInfo = self.TxInfo(*txInfo)
-        newRxInfo = self.RxInfo(*rxInfo)
-        newMessage = self.Message(
-            applicationName = message['applicationName'],
-            applicationID = message['applicationID'],
-            devEUI = message['devEUI'],
-            nodeName = message['nodeName'],
-            data = message['data'],
-            fCnt = message['fCnt'],
-            fPort = message['fPort'],
-            gateway = message['gateway'],
-            node = message['node'],
-            timestamp = message['timestamp'],
-            rxInfo = message['rxInfo'],
-            txInfo = message['txInfo'])
+        newRxInfo = self.RxInfo(loRaSNR= rxInfo['loRaSNR'],
+                                latitude= rxInfo['latitude'],
+                                altitude= rxInfo['altitude'],
+                                longitude= rxInfo['longitude'],
+                                gatwayMac= rxInfo['mac'],
+                                gatwayName= rxInfo['name'],
+                                time=rxInfo['time'],
+                                rssi=rxInfo['rssi'])
+        newTxInfo = self.TxInfo(adr=txInfo['adr'],
+                                codeRate=txInfo['codeRate'],
+                                bandwidth=txInfo['dataRate']['bandwidth'],
+                                modulation=txInfo['dataRate']['modulation'],
+                                spreadFactor=txInfo['dataRate']['spreadFactor'],
+                                frequency=txInfo['frequency'])
+        newMessage = self.Message(applicationName = message['applicationName'],
+                                  applicationID = message['applicationID'],
+                                  nodeName = message['nodeName'],
+                                  devEUI = message['devEUI'],
+                                  data = message['data'],
+                                  fCnt = message['fCnt'],
+                                  fPort = message['fPort'])
+        newTxInfo.save()
+        newRxInfo.save()
+        newMessage.txInfo = newTxInfo
+        newMessage.rxInfo = newRxInfo
+        newMessage.save()
         print("Message", newMessage)
-        # print("Message data", message['data'])
-        # print("txInfo", newTxInfo)
-        # print("rxInfo", newRxInfo)
+        print("TxInfo", newTxInfo)
+        print("RxInfo", newRxInfo)
