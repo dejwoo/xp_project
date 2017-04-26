@@ -22,6 +22,7 @@ class MqttClient(object):
     def getSignal(self):
         return self.signal
 
+
     def on_connect(self, client, userdata, flags, rc):
         print("Connected to dejwoo.com")
         client.subscribe('data')
@@ -53,3 +54,4 @@ class MqttClient(object):
             self.signal_count = not self.signal_count
             return True
         return False
+
