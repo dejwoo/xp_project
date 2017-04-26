@@ -10,7 +10,7 @@ class ApiConfig(AppConfig):
     verbose_name = 'Project Noe API app'
 
     def ready(self):
-        self.mqtt = MqttClient();
+        self.mqtt = MqttClient()
         self.Message = self.get_model('Message')
         self.TxInfo = self.get_model('TxInfo')
         self.RxInfo = self.get_model('RxInfo')

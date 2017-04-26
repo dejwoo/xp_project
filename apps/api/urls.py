@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from . import views
 
 router = DefaultRouter()
-router.register(r'users', views.UserListViewSet, 'list')
+router.register(r'users', views.UserViewSet, 'list')
 router.register(r'gateway', views.GatewayListViewSet, 'gateways')
 router.register(r'nodes', views.NodeListViewSet, 'nodes')
 router.register(r'swarms', views.SwarmListViewSet, 'swarms')
@@ -25,4 +25,3 @@ urlpatterns = [
     #url(r'^swarm/(?P<pk>[0-9]+)/data$', views.SwarmDataView.as_view(), name='swarmData'),
 
 ]
-

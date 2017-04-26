@@ -1,23 +1,29 @@
-from django.contrib.postgres.fields import ArrayField
 from django.db import models
+from django.db.models.signals import post_save
+from django.contrib.auth.models import User
+from django.dispatch import receiver
 from rest_framework import serializers
 
 
-# Create your models here.
-
-class User(models.Model):
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     company = models.CharField(max_length=100)
-    email = models.EmailField(max_length=100)
-    first_name = models.CharField(max_length=100)
-    gateways = models.ForeignKey('Gateway', null=False)
-    last_name = models.CharField(max_length=100)
-    nodes = models.ForeignKey('Node', null=False)
-    registered = models.CharField(max_length=100)
+    gateways = models.ForeignKey('api.Gateway')
+    nodes = models.ForeignKey('api.Node')
 
 
-class UserSerializer(serializers.ModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = Profile
+        fields = ('user', 'company')
+
+
+@receiver(post_save, sender=User, dispatch_uid='save_new_user_profile')
+def save_profile(sender, instance, created, **kwargs):
+    user = instance
+    if created:
+        profile = Profile(user=user)
+        profile.save()
 
 
 class Gateway(models.Model):
@@ -127,12 +133,12 @@ class RxInfoSerializer(serializers.ModelSerializer):
 #   }
 # }
 class TxInfo(models.Model):
-    adr = models.BooleanField()
+    adr = models.BooleanField(default=False)
     codeRate = models.CharField(max_length=10)
-    bandwidth = models.IntegerField()
+    bandwidth = models.IntegerField(default=0)
     modulation = models.CharField(max_length=10)
-    spreadFactor = models.IntegerField()
-    frequency = models.IntegerField()
+    spreadFactor = models.IntegerField(default=0)
+    frequency = models.IntegerField(default=0)
 
 
 class TxInfoSerializer(serializers.ModelSerializer):
@@ -161,11 +167,12 @@ class Message(models.Model):
     gateway = models.ForeignKey(Gateway)
     node = models.ForeignKey(Node)
     timestamp = models.DateTimeField(auto_now=True)
-    rxInfo = models.ForeignKey(RxInfo);
-    txInfo = models.ForeignKey(TxInfo);
+    rxInfo = models.ForeignKey(RxInfo)
+    txInfo = models.ForeignKey(TxInfo)
 
     def __str__(self):
         return str(self.__dict__)
+
 
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
