@@ -19,6 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
 
+
 class Gateway(models.Model):
     gps_lat = models.FloatField()
     gps_lon = models.FloatField()
@@ -32,7 +33,6 @@ class GatewaySerializer(serializers.ModelSerializer):
         model = Gateway
 
 
-
 class Node(models.Model):
     app_eui = models.CharField(max_length=100)
     app_key = models.CharField(max_length=100)
@@ -44,11 +44,9 @@ class Node(models.Model):
     type = models.CharField(max_length=100)
 
 
-
 class NodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Node
-
 
 
 class Swarm(models.Model):
@@ -57,9 +55,37 @@ class Swarm(models.Model):
     name = models.CharField(max_length=100)
     nodes = models.ForeignKey(Node)
 
+
 class SwarmSerializer(serializers.ModelSerializer):
     class Meta:
         model = Swarm
+
+
+# {
+#   "applicationID": "bd60ba7f-a94e-466c-a26f-ea2d5e517173",
+#   "applicationName": "wind-sensor",
+#   "data": 532.9433,
+#   "devEUI": "87832a8a-7c05-4568-bef5-9e81b44d282f",
+#   "fCnt": 25,
+#   "fPort": 1,
+#   "nodeName": "sensor",
+#   "frequency": 868500000
+
+class Data(models.Model):
+    applicationName = models.CharField(max_length=100)
+    applicationID = models.UUIDField()
+    devEUI = models.UUIDField()
+    nodeName = models.CharField(max_length=100),
+    data = models.TextField()
+    fCnt = models.IntegerField()
+    fPort = models.IntegerField()
+    frequency = models.IntegerField()
+    gateway = models.ForeignKey(Gateway)
+    node = models.ForeignKey(Node)
+    timestamp = models.DateTimeField(auto_now=True)
+    value = models.CharField(max_length=100)
+    rxInfo = models.ForeignKey('RxInfo')
+    txInfo = models.ForeignKey('TxInfo')
 
 
 # "rxInfo": [
@@ -84,9 +110,11 @@ class RxInfo(models.Model):
     rssi = models.IntegerField()
     time = models.DateTimeField()
 
+
 class RxInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = RxInfo
+
 
 #   "txInfo": {
 #     "adr": false,
@@ -106,10 +134,10 @@ class TxInfo(models.Model):
     spreadFactor = models.IntegerField()
     frequency = models.IntegerField()
 
+
 class TxInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = TxInfo
-
 
 
 # {
@@ -139,10 +167,9 @@ class Message(models.Model):
     def __str__(self):
         return str(self.__dict__)
 
-class DataSerializer(serializers.ModelSerializer):
+class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-
 
 
 class ErrorModel(models.Model):
