@@ -2,20 +2,13 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from django.dispatch import receiver
-from rest_framework import serializers
 
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     company = models.CharField(max_length=100)
-    gateways = models.ForeignKey('api.Gateway')
-    nodes = models.ForeignKey('api.Node')
-
-
-class ProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = ('user', 'company')
+    gateways = models.ForeignKey('api.Gateway', blank=True, null=True)
+    nodes = models.ForeignKey('api.Node', blank=True, null=True)
 
 
 @receiver(post_save, sender=User, dispatch_uid='save_new_user_profile')
@@ -33,10 +26,8 @@ class Gateway(models.Model):
     mac = models.CharField(max_length=100)
     serial = models.CharField(max_length=100)
 
-
-class GatewaySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Gateway
+    def __str__(self):
+        return str(self.__dict__)
 
 
 class Node(models.Model):
@@ -49,10 +40,8 @@ class Node(models.Model):
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=100)
 
-
-class NodeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Node
+    def __str__(self):
+        return str(self.__dict__)
 
 
 class Swarm(models.Model):
@@ -61,10 +50,8 @@ class Swarm(models.Model):
     name = models.CharField(max_length=100)
     nodes = models.ForeignKey(Node)
 
-
-class SwarmSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Swarm
+    def __str__(self):
+        return str(self.__dict__)
 
 
 # {
@@ -89,6 +76,20 @@ class Message(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     rxInfo = models.ForeignKey('RxInfo', blank=True, null=True)
     txInfo = models.ForeignKey('TxInfo', blank=True, null=True)
+
+    def __str__(self):
+        return str(self.__dict__)
+
+
+@receiver(post_save, sender=Message, dispatch_uid='save_new_message')
+def save_profile(sender, instance, created, **kwargs):
+    if created:
+        gateway = Gateway(gps_lat=instance.rxInfo.latitude,
+                          gps_lon=instance.rxInfo.longitude,
+                          serial=instance.rxInfo.gatwayName,
+                          mac=instance.rxInfo.gatwayMac)
+        gateway.save()
+        print(gateway)
 
     def __str__(self):
         return str(self.__dict__)
@@ -121,11 +122,6 @@ class RxInfo(models.Model):
         return str(self.__dict__)
 
 
-class RxInfoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RxInfo
-
-
 #   "txInfo": {
 #     "adr": false,
 #     "codeRate": "4/8",
@@ -146,11 +142,6 @@ class TxInfo(models.Model):
 
     def __str__(self):
         return str(self.__dict__)
-
-
-class TxInfoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TxInfo
 
 
 class ErrorModel(models.Model):

@@ -1,23 +1,15 @@
+from django.http import Http404
 from rest_framework.decorators import detail_route
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
-from rest_framework import viewsets
+from rest_framework import viewsets, status, mixins, generics, permissions
+from rest_framework.views import APIView
+
 from apps.api.permissions import IsStaffOrTargetUser
 from apps.api.models import *
-
-
-class IndexView(CreateAPIView):
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = "api/index.html"
-
-    def get(self, request, *args, **kwargs):
-        context = {'some_dynamic_value': 'This text comes from django view!', }
-        return Response(context)
-
-    def post(self, request, *args, **kwargs):
-        pass
+from apps.api.serializers import ProfileSerializer, GatewaySerializer, NodeSerializer, SwarmSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -33,19 +25,43 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         # allow non-authenticated user to create via POST
-        return (AllowAny() if self.request.method == 'POST' else IsStaffOrTargetUser()),
-    
+        return (AllowAny()),
+
 
 class GatewayListViewSet(viewsets.ModelViewSet):
     queryset = Gateway.objects.all()
     serializer_class = GatewaySerializer
+    permission_classes = (permissions.AllowAny,)
+
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+
+class GatewayDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Gateway.objects.all()
+    serializer_class = GatewaySerializer
+    permission_classes = (permissions.AllowAny,)
 
 
 class NodeListViewSet(viewsets.ModelViewSet):
     queryset = Node.objects.all()
     serializer_class = NodeSerializer
+    permission_classes = (permissions.AllowAny,)
+
+
+class NodeDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Node.objects.all()
+    serializer_class = NodeSerializer
+    permission_classes = (permissions.AllowAny,)
 
 
 class SwarmListViewSet(viewsets.ModelViewSet):
     queryset = Swarm.objects.all()
     serializer_class = SwarmSerializer
+    permission_classes = (permissions.AllowAny,)
+
+
+class SwarmDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Swarm.objects.all()
+    serializer_class = SwarmSerializer
+    permission_classes = (permissions.AllowAny,)

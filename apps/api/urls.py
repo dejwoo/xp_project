@@ -5,15 +5,14 @@ from . import views
 
 router = DefaultRouter()
 router.register(r'users', views.UserViewSet, 'list')
-router.register(r'gateway', views.GatewayListViewSet, 'gateways')
+router.register(r'gateways', views.GatewayListViewSet, 'gateways')
 router.register(r'nodes', views.NodeListViewSet, 'nodes')
 router.register(r'swarms', views.SwarmListViewSet, 'swarms')
 urlpatterns = [
     url(r'^', include(router.urls)),
-    url(r'^$', views.IndexView.as_view(), name='index'),
 
-    #url(r'^gateway/(?P<pk>[0-9]+)$', views.GatewayView.as_view(), name='gateway'),
-    #url(r'^gateway/(?P<pk>[0-9]+)/data$', views.GatewayDataView.as_view(), name='gatewayData'),
+    url(r'^gateways/(?P<pk>[0-9]+)$', views.GatewayDetailView.as_view(), name='gateway'),
+    url(r'^gateways/(?P<pk>[0-9]+)/data$', views.GatewayDetailView.as_view(), name='gatewayData'),
 
     #url(r'^user/(?P<pk>[0-9]+)$', views.UserView.as_view(), names='user'),
     #url(r'^user/(?P<pk>[0-9]+)/data$', views.UserDataView.as_view(), names='userData'),
