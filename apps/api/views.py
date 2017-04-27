@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from apps.api.permissions import IsStaffOrTargetUser
 from apps.api.models import *
 from apps.api.serializers import UserSerializer, GatewaySerializer, NodeSerializer, SwarmSerializer
-
+from rest_framework_jwt.views import obtain_jwt_token
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -24,7 +24,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         # allow non-authenticated user to create via POST
-        return (AllowAny(),)
+        return (IsStaffOrTargetUser(),)
 
 
 class GatewayListViewSet(viewsets.ModelViewSet):
