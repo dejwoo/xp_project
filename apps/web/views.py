@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from rest_framework.decorators import api_view
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
@@ -24,3 +25,9 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, 'web/sign_up.html', {'form': form})
+
+
+@login_required
+def logged_in(request):
+    context = {'title': 'Dashboard'}
+    return render(request, 'web/dashboard.html', context=context)
