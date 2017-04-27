@@ -6,18 +6,17 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework import viewsets, status, mixins, generics, permissions
 from rest_framework.views import APIView
-
 from apps.api.permissions import IsStaffOrTargetUser
 from apps.api.models import *
-from apps.api.serializers import ProfileSerializer, GatewaySerializer, NodeSerializer, SwarmSerializer
+from apps.api.serializers import UserSerializer, GatewaySerializer, NodeSerializer, SwarmSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
     """
     A simple ViewSet for viewing and editing accounts.
     """
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
     @detail_route(methods=['get'])
     def data(self, request, pk=None):
@@ -25,7 +24,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         # allow non-authenticated user to create via POST
-        return (AllowAny()),
+        return (AllowAny(),)
 
 
 class GatewayListViewSet(viewsets.ModelViewSet):

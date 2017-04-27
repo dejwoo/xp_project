@@ -1,21 +1,11 @@
 from rest_framework import serializers
-
-from apps.api.models import Profile, Gateway, Node, Swarm, RxInfo, TxInfo, Message
-
-
-class ProfileSerializer(serializers.ModelSerializer):
-    gateways = serializers.PrimaryKeyRelatedField(many=True, queryset=Gateway.objects.all())
-    nodes = serializers.PrimaryKeyRelatedField(many=True, queryset=Node.objects.all())
-
-    class Meta:
-        model = Profile
-        fields = ('user', 'company', 'gateways', 'nodes')
+from apps.api.models import User, Gateway, Node, Swarm, RxInfo, TxInfo, Message
 
 
 class GatewaySerializer(serializers.ModelSerializer):
     class Meta:
         model = Gateway
-        fields = ('gps_lat', 'gps_lon', 'last_seen', 'mac', 'serial')
+        fields = ('id','gps_lat', 'gps_lon', 'last_seen', 'mac', 'serial')
 
 
 class NodeSerializer(serializers.ModelSerializer):
@@ -24,6 +14,27 @@ class NodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Node
         fields = ('app_eui', 'app_key', 'dev_addr', 'dev_eui', 'last_gateway', 'last_seen', 'name', 'type')
+
+class UserSerializer(serializers.ModelSerializer):
+    gateways = serializers.PrimaryKeyRelatedField(many=True, queryset=Gateway.objects.all())
+    nodes = serializers.PrimaryKeyRelatedField(many=True, queryset=Node.objects.all())
+
+    def create(self, validated_data):
+        return Profile.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.company = validated_data.get('company', instance.company)
+        instance.gateways = validated_data.get('gateways', instance.gateways)
+        instance.nodes = validated_data.get('nodes', instance.nodes)
+        instance.save()
+        return instance
+
+    class Meta:
+        model = User
+        fields = '__all__'
+        gateways = GatewaySerializer(required=False)
+        nodes = NodeSerializer(required=False)
+
 
 
 class SwarmSerializer(serializers.ModelSerializer):

@@ -1,23 +1,12 @@
 from django.db import models
 from django.db.models.signals import post_save
-from django.contrib.auth.models import User
 from django.dispatch import receiver
+from django.contrib.auth.models import AbstractUser
 
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class User(AbstractUser):
     company = models.CharField(max_length=100)
     gateways = models.ForeignKey('api.Gateway', blank=True, null=True)
     nodes = models.ForeignKey('api.Node', blank=True, null=True)
-
-
-@receiver(post_save, sender=User, dispatch_uid='save_new_user_profile')
-def save_profile(sender, instance, created, **kwargs):
-    user = instance
-    if created:
-        profile = Profile(user=user)
-        profile.save()
-
 
 class Gateway(models.Model):
     gps_lat = models.FloatField()

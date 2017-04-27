@@ -51,7 +51,8 @@ DEFAULT_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_extensions',
-
+    "apps.api",
+    "apps.web"
 ]
 
 # Middlewares
@@ -178,3 +179,6 @@ except IOError:
             f.write(SECRET_KEY)
     except IOError:
         raise Exception('Could not open %s for writing!' % SECRET_FILE)
+
+#Custom User model
+AUTH_USER_MODEL = "api.User"
