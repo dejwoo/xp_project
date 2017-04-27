@@ -23,4 +23,4 @@ urlpatterns = [
     #url(r'^swarm$', views.SwarmDetailView.as_view(), name='swarm'),
     #url(r'^swarm/(?P<pk>[0-9]+)/data$', views.SwarmDetailView.as_view(), name='swarm-detail'),
 
-# ]
+]
