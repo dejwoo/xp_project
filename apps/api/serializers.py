@@ -2,22 +2,23 @@ from rest_framework import serializers
 from apps.api.models import User, Gateway, Node, Swarm, RxInfo, TxInfo, Message
 
 
-class GatewaySerializer(serializers.ModelSerializer):
+class GatewaySerializer(serializers.HyperlinkedModelSerializer):
+
     class Meta:
         model = Gateway
         fields = ('id','gps_lat', 'gps_lon', 'last_seen', 'mac', 'serial')
 
 
-class NodeSerializer(serializers.ModelSerializer):
-    last_gateway = serializers.PrimaryKeyRelatedField(many=True, queryset=Gateway.objects.all())
+class NodeSerializer(serializers.HyperlinkedModelSerializer):
+    last_gateway = serializers.HyperlinkedRelatedField(many=True, view_name='gateways-detail', read_only=True)
 
     class Meta:
         model = Node
         fields = ('app_eui', 'app_key', 'dev_addr', 'dev_eui', 'last_gateway', 'last_seen', 'name', 'type')
 
-class UserSerializer(serializers.ModelSerializer):
-    gateways = serializers.PrimaryKeyRelatedField(many=True, queryset=Gateway.objects.all())
-    nodes = serializers.PrimaryKeyRelatedField(many=True, queryset=Node.objects.all())
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    gateways = serializers.HyperlinkedRelatedField(many=True, view_name='gateways-detail', read_only=True)
+    nodes = serializers.HyperlinkedRelatedField(many=True, view_name='nodes-detail', read_only=True)
 
     def create(self, validated_data):
         return User.objects.create(**validated_data)
