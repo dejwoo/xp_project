@@ -20,7 +20,7 @@ class UserSerializer(serializers.ModelSerializer):
     nodes = serializers.PrimaryKeyRelatedField(many=True, queryset=Node.objects.all())
 
     def create(self, validated_data):
-        return Profile.objects.create(**validated_data)
+        return User.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
         instance.company = validated_data.get('company', instance.company)
