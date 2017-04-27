@@ -22,6 +22,9 @@ STATIC_ROOT = join(PROJECT_ROOT, 'run', 'static')
 # Collect media files here
 MEDIA_ROOT = join(PROJECT_ROOT, 'run', 'media')
 
+# Redirect user to this page after login
+LOGIN_REDIRECT_URL = '/accounts/dashboard'
+
 # look for static assets here
 STATICFILES_DIRS = [
     join(PROJECT_ROOT, 'static'),

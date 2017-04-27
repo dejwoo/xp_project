@@ -71,11 +71,3 @@ class SwarmDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SwarmSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,)
-
-
-@api_view(['GET'])
-def api_root(request, format=None):
-    return Response({
-        'users': reverse('user-list', request=request, format=format),
-        'gateways': reverse('gateway-list', request=request, format=format)
-    })
