@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 from apps.api.permissions import IsStaffOrTargetUser, IsOwnerOrReadOnly
 from apps.api.models import *
 from apps.api.serializers import UserSerializer, GatewaySerializer, NodeSerializer, SwarmSerializer
-
+from rest_framework_jwt.views import obtain_jwt_token
 
 class UserViewSet(viewsets.ModelViewSet):
     """

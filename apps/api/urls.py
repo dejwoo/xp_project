@@ -5,6 +5,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
 
 router = DefaultRouter()
+
 router.register(r'users', views.UserViewSet, 'user')
 router.register(r'gateways', views.GatewayListViewSet, 'gateway')
 router.register(r'nodes', views.NodeListViewSet, 'node')
@@ -22,4 +23,4 @@ urlpatterns = [
     #url(r'^swarm$', views.SwarmDetailView.as_view(), name='swarm'),
     #url(r'^swarm/(?P<pk>[0-9]+)/data$', views.SwarmDetailView.as_view(), name='swarm-detail'),
 
-]
+# ]

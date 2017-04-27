@@ -6,7 +6,7 @@ class GatewaySerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Gateway
-        fields = ('id','gps_lat', 'gps_lon', 'last_seen', 'mac', 'serial')
+        fields = '__all__'
 
 
 class NodeSerializer(serializers.HyperlinkedModelSerializer):
@@ -14,7 +14,8 @@ class NodeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Node
-        fields = ('app_eui', 'app_key', 'dev_addr', 'dev_eui', 'last_gateway', 'last_seen', 'name', 'type')
+        fields = '__all__'
+
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     gateways = serializers.HyperlinkedRelatedField(many=True, view_name='gateways-detail', read_only=True)
@@ -29,12 +30,12 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         instance.nodes = validated_data.get('nodes', instance.nodes)
         instance.save()
         return instance
-
+      
     class Meta:
         model = User
         fields = '__all__'
-        gateways = GatewaySerializer(required=False)
-        nodes = NodeSerializer(required=False)
+        gateways = GatewaySerializer(required=False, many=True)
+        nodes = NodeSerializer(required=False, many=True)
 
 
 
