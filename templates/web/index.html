@@ -3,17 +3,40 @@
 {% block content %}
     <header>
         {% block header %}
+            <ul id="navbar-dropdown" class="dropdown-content">
+                {% block navbar-dropdown-content %}
+                    <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                    <li><a href="#!">View Profile</a></li>
+                    <li><a href="#!">Change Password</a></li>
+                {% endblock %}
+            </ul>
             <nav>
                 <div class="nav-wrapper">
                     <a href="#!" class="brand-logo">{% block navbar-title %}{{ title }}{% endblock %}</a>
                     <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
                     <ul class="right hide-on-med-and-down">
-                        <li><a class="waves-effect waves-light btn" href="/login">Login</a></li>
-                        <li><a class="waves-effect waves-light btn" href="/signup">Sign Up</a></li>
+                        {% if request.user.is_authenticated %}
+                            <li><a class="waves-effect waves-light btn" href="{% url 'logout' %}">Log out</a></li>
+                            <li><a class="dropdown-button" href="#!" data-activates="navbar-dropdown">
+                                More<i class="material-icons right">arrow_drop_down</i></a>
+                            </li>
+                        {% else %}
+                            <li><a class="waves-effect waves-light btn" href="{% url 'login' %}">Login</a></li>
+                            <li><a class="waves-effect waves-light btn" href="{% url 'signup' %}">Sign Up</a></li>
+                        {% endif %}
+
                     </ul>
                     <ul class="side-nav" id="mobile-demo">
-                        <li><a class="waves-effect waves-light btn" href="/login">Login</a></li>
-                        <li><a class="waves-effect waves-light btn" href="/signup">Sign Up</a></li>
+                        {% if request.user.is_authenticated %}
+                            <li><a class="waves-effect waves-light btn" href="{% url 'dashboard' %}">Dashboard</a></li>
+                            <li><a class="waves-effect waves-light btn" href="#!">View Profile</a></li>
+                            <li><a class="waves-effect waves-light btn" href="#!">Change Password</a></li>
+                            <li class="divider"></li>
+                            <li><a class="waves-effect waves-light btn" href="{% url 'logout' %}">Log out</a></li>
+                        {% else %}
+                            <li><a class="waves-effect waves-light btn" href="{% url 'login' %}">Login</a></li>
+                            <li><a class="waves-effect waves-light btn" href="{% url 'signup' %}">Sign Up</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </nav>

@@ -1,0 +1,40 @@
+{% extends 'web/index.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block navbar-title %}
+    {{ request.user.username }}'s Dashboard
+{% endblock navbar-title %}
+
+{% block main %}
+    <article class="container">
+        <h2>Request auth token</h2>
+        <ul class="collapsible" data-collapsible="accordion">
+            <li>
+                <div class="collapsible-header"><i class="material-icons">filter_drama</i>Regular Token</div>
+                <div class="collapsible-body">
+                    <form method='POST' id='token-request-form' action="{% url 'create-basic-token' %}">
+                        {% csrf_token %}
+                        <button class="btn waves-effect waves-light" type="submit" name="action">Get Token
+                            <i class="material-icons right">send</i>
+                        </button>
+                    </form>
+                </div>
+            </li>
+            <li>
+                <div class="collapsible-header"><i class="material-icons">place</i>JSON Web Token</div>
+                <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+            </li>
+        </ul>
+        {% if request.user.username == 'admin' %}
+            <h2>Other</h2>
+            <ul class="collapsible" data-collapsible="accordion">
+                <li>
+                    <div class="collapsible-header"><i class="material-icons">filter_drama</i>Go to the admin page</div>
+                    <div class="collapsible-body">
+                        <a class="btn waves-effect waves-light" href="/admin">Admin panel</a>
+                    </div>
+                </li>
+            </ul>
+        {% endif %}
+    </article>
+{% endblock %}

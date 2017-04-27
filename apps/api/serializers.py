@@ -3,21 +3,32 @@ from django.contrib.auth.models import Permission
 from apps.api.models import User, Gateway, Node, Swarm, RxInfo, TxInfo, Message
 
 
-class GatewaySerializer(serializers.ModelSerializer):
+class GatewaySerializer(serializers.HyperlinkedModelSerializer):
+
     class Meta:
         model = Gateway
         fields = '__all__'
 
 
-class NodeSerializer(serializers.ModelSerializer):
-    last_gateway = serializers.PrimaryKeyRelatedField(many=True, queryset=Gateway.objects.all())
+class NodeSerializer(serializers.HyperlinkedModelSerializer):
+    last_gateway = serializers.HyperlinkedRelatedField(many=True, view_name='gateways-detail', read_only=True)
 
     class Meta:
         model = Node
         fields = '__all__'
 
-class UserSerializer(serializers.ModelSerializer):
 
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    gateways = serializers.HyperlinkedRelatedField(many=True, view_name='gateways-detail', read_only=True)
+    nodes = serializers.HyperlinkedRelatedField(many=True, view_name='nodes-detail', read_only=True)
+
+    def update(self, instance, validated_data):
+        instance.company = validated_data.get('company', instance.company)
+        instance.gateways = validated_data.get('gateways', instance.gateways)
+        instance.nodes = validated_data.get('nodes', instance.nodes)
+        instance.save()
+        return instance
+      
     def create(self, validated_data):
         if not validated_data['groups']:
             validated_data.pop('groups')
@@ -36,7 +47,7 @@ class UserSerializer(serializers.ModelSerializer):
         #             gateways = validated_data['gateways'],
         #             nodes = validated_data['nodes'])
         return User.objects.create(**validated_data)
-
+      
     class Meta:
         model = User
         fields = '__all__'

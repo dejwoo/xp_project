@@ -22,6 +22,9 @@ STATIC_ROOT = join(PROJECT_ROOT, 'run', 'static')
 # Collect media files here
 MEDIA_ROOT = join(PROJECT_ROOT, 'run', 'media')
 
+# Redirect user to this page after login
+LOGIN_REDIRECT_URL = '/accounts/dashboard'
+
 # look for static assets here
 STATICFILES_DIRS = [
     join(PROJECT_ROOT, 'static'),
@@ -105,14 +108,16 @@ MANAGERS = ADMINS
 # ##### REST FRAMEWORK CONFIGURATION ############################
 
 REST_FRAMEWORK = {
-     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.BasicAuthentication',        
     ),
+    'DEFAULT_PERMISSION_CLASSES': (
+      'rest_framework.permissions.IsAuthenticated',  
+    ),
+    'PAGE_SIZE': 10,
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
 
