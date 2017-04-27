@@ -14,13 +14,10 @@ urlpatterns = [
     url(r'^gateways/(?P<pk>[0-9]+)$', views.GatewayDetailView.as_view(), name='gateway'),
     url(r'^gateways/(?P<pk>[0-9]+)/data$', views.GatewayDetailView.as_view(), name='gatewayData'),
 
-    #url(r'^user/(?P<pk>[0-9]+)$', views.UserView.as_view(), names='user'),
-    #url(r'^user/(?P<pk>[0-9]+)/data$', views.UserDataView.as_view(), names='userData'),
+    url(r'^node$', views.NodeDetailView.as_view(), name='node'),
+    url(r'^node/(?P<pk>[0-9]+)/data$', views.NodeDetailView.as_view(), name='nodeData'),
 
-    #url(r'^node$', views.NodeView.as_view(), name='node'),
-    #url(r'^node/(?P<pk>[0-9]+)/data$', views.NodeDataView.as_view(), name='nodeData'),
-
-    #url(r'^swarm$', views.SwarmView.as_view(), name='swarm'),
-    #url(r'^swarm/(?P<pk>[0-9]+)/data$', views.SwarmDataView.as_view(), name='swarmData'),
+    url(r'^swarm$', views.SwarmDetailView.as_view(), name='swarm'),
+    url(r'^swarm/(?P<pk>[0-9]+)/data$', views.SwarmDetailView.as_view(), name='swarmData'),
 
 ]
