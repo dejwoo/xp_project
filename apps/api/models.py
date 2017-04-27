@@ -4,9 +4,12 @@ from django.dispatch import receiver
 from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
+    id = models.AutoField(primary_key=True)
     company = models.CharField(max_length=100)
     gateways = models.ForeignKey('api.Gateway', blank=True, null=True)
     nodes = models.ForeignKey('api.Node', blank=True, null=True)
+    def __str__(self):
+        return str(self.__dict__)
 
 class Gateway(models.Model):
     gps_lat = models.FloatField()
