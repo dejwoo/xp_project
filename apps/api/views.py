@@ -13,6 +13,7 @@ from apps.api.models import *
 from apps.api.serializers import UserSerializer, GatewaySerializer, NodeSerializer, SwarmSerializer
 from rest_framework_jwt.views import obtain_jwt_token
 
+
 class UserViewSet(viewsets.ModelViewSet):
     """
     A simple ViewSet for viewing and editing accounts.
@@ -20,7 +21,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     authentication_classes = (SessionAuthentication, BasicAuthentication)
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+    permission_classes = (AllowAny, permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,)
 
     @detail_route(methods=['get'])
@@ -31,7 +32,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class GatewayListViewSet(viewsets.ModelViewSet):
     queryset = Gateway.objects.all()
     serializer_class = GatewaySerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+    permission_classes = (AllowAny, permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,)
 
     #def list(self, request, *args, **kwargs):
@@ -41,33 +42,33 @@ class GatewayListViewSet(viewsets.ModelViewSet):
 class GatewayDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Gateway.objects.all()
     serializer_class = GatewaySerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+    permission_classes = (AllowAny, permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,)
 
 
 class NodeListViewSet(viewsets.ModelViewSet):
     queryset = Node.objects.all()
     serializer_class = NodeSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+    permission_classes = (AllowAny, permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,)
 
 
 class NodeDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Node.objects.all()
     serializer_class = NodeSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+    permission_classes = (AllowAny, permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,)
 
 
 class SwarmListViewSet(viewsets.ModelViewSet):
     queryset = Swarm.objects.all()
     serializer_class = SwarmSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+    permission_classes = (AllowAny, permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,)
 
 
 class SwarmDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Swarm.objects.all()
     serializer_class = SwarmSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+    permission_classes = (AllowAny, permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,)

@@ -1,9 +1,74 @@
 {% extends 'web/index.html' %}
+{% load staticfiles %}
 
 {% block title %}{{ title }}{% endblock %}
 {% block navbar-title %}
     {{ request.user.username }}'s Dashboard
 {% endblock navbar-title %}
+
+{% block javascript %}
+    {{ block.super }}
+    <script>
+        // CSRF code
+        $(document).ready(function () {
+            function getCookie(name) {
+                var cookieValue = null;
+                var i = 0;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (i; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            var csrftoken = getCookie('csrftoken');
+
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            $.ajaxSetup({
+                crossDomain: false, // obviates need for sameOrigin test
+                beforeSend: function (xhr, settings) {
+                    if (!csrfSafeMethod(settings.type)) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+
+            $('#token-request-submit').click(function (event) {
+                $.ajax({
+                    type: 'post',
+                    data: {},
+                    url: "{% url 'create-basic-token' %}",
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#token-request-submit').hide();
+                        $('#token').val(data.token);
+                        $('#basic-token-div').fadeIn("slow");
+                        var clipboard = new Clipboard('.copy-btn');
+                        clipboard.on('success', function (e) {
+                            var $toastContent = $('<span>Token has been copied to clipboard.</span>');
+                            Materialize.toast($toastContent, 3000);
+                            e.clearSelection();
+                        })
+                    },
+                    failure: function (data) {
+                        console.error('Got an error dude');
+                    }
+                });
+            })
+        });
+    </script>
+{% endblock %}
 
 {% block main %}
     <article class="container">
@@ -12,12 +77,19 @@
             <li>
                 <div class="collapsible-header"><i class="material-icons">filter_drama</i>Regular Token</div>
                 <div class="collapsible-body">
-                    <form method='POST' id='token-request-form' action="{% url 'create-basic-token' %}">
-                        {% csrf_token %}
-                        <button class="btn waves-effect waves-light" type="submit" name="action">Get Token
-                            <i class="material-icons right">send</i>
-                        </button>
-                    </form>
+                    {% csrf_token %}
+                    <button class="btn waves-effect waves-light" id="token-request-submit" name="action">
+                        Get Token <i class="material-icons right">send</i>
+                    </button>
+                    <div id="basic-token-div" class="row fade-in-div">
+                        <input id="token" class="col s10" type="text" value="">
+                        <span class="input-group-button col s2">
+                            <button class="btn copy-btn" type="button" data-clipboard-target="#token">
+                            <img class="clippy" src="{% static "images/clippy.svg" %}" width="13"
+                                 alt="Copy to clipboard">
+                            </button>
+                        </span>
+                    </div>
                 </div>
             </li>
             <li>
