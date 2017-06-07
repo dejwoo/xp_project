@@ -6,7 +6,7 @@ from django.contrib.auth import login, authenticate, mixins
 from django.shortcuts import render, redirect, render_to_response
 from apps.web.forms import SignUpForm
 from rest_framework.authtoken.models import Token
-
+from rest_framework_jwt.settings import api_settings
 from xp_project.settings.common import LOGIN_REDIRECT_URL
 
 
@@ -38,8 +38,13 @@ def createBasicApiToken(request):
         return JsonResponse(data={'token': token[0].key, 'isCreated': token[1]})
     else:
         return redirect('/')
-
-
+@login_required
+def createJwtApiToken(request):
+    jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+    jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+    payload = jwt_payload_handler(request.user)
+    token = jwt_encode_handler(payload)
+    return JsonResponse(data={'token':token})
 class DashboardView(mixins.LoginRequiredMixin, generic.TemplateView):
     template_name = 'web/dashboard.html'
 

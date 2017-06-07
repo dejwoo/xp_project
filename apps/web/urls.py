@@ -8,7 +8,8 @@ urlpatterns = (
     url(r'^logout/$', auth_views.logout, {'template_name': 'web/logged_out.html'}, name='logout'),
     url(r'^signup/$', views.signup, name='signup'),
     url(r'^accounts/dashboard/', views.DashboardView.as_view(), name='dashboard'),
-    url(r'^ajax/create-basic-token',views.createBasicApiToken, name='create-basic-token')
+    url(r'^ajax/create-basic-token',views.createBasicApiToken, name='create-basic-token'),
+    url(r'^ajax/create-jwt-token',views.createJwtApiToken, name='create-jwt-token')
     #TODO implement profile page
     #url(r'^accounts/profile/(?P<pk>[0-9]+)', views.ProfilePageView.as_view(), name='profile_page'),
 )

@@ -1,14 +1,14 @@
 from django.http import Http404
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
-from rest_framework.decorators import detail_route, api_view
+from rest_framework.decorators import detail_route, list_route, api_view, permission_classes
 from rest_framework.generics import CreateAPIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework import viewsets, status, mixins, generics, permissions
 from rest_framework.reverse import reverse
 from rest_framework.views import APIView
-from apps.api.permissions import IsStaffOrTargetUser, IsOwnerOrReadOnly
+from apps.api.permissions import IsStaffOrTargetUser, IsOwnerOrReadOnly, IsOwner
 from apps.api.models import *
 from apps.api.serializers import UserSerializer, GatewaySerializer, NodeSerializer, SwarmSerializer
 from rest_framework_jwt.views import obtain_jwt_token
@@ -20,14 +20,19 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
-    permission_classes = (AllowAny, permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly,)
+    permission_classes = (IsAdminUser,)
 
-    @detail_route(methods=['get'])
+    @detail_route(methods=['get', 'delete', 'post'])
+    @permission_classes([IsAdminUser, IsOwner])
     def data(self, request, pk=None):
+        permission_classes = (IsOwner, IsAdminUser,)
         user = self.get_object()
+        return Response(serializer.data)
 
+    @list_route(methods=['get', 'delete', 'post'])
+    @permission_classes([IsAdminUser])
+    def data(self, request):
+        return Response(serializer.data)
 
 class GatewayListViewSet(viewsets.ModelViewSet):
     queryset = Gateway.objects.all()

@@ -66,6 +66,28 @@
                     }
                 });
             })
+            $('#jwt-token-request-submit').click(function (event) {
+                $.ajax({
+                    type: 'post',
+                    data: {},
+                    url: "{% url 'create-jwt-token' %}",
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#jwt-token-request-submit').hide();
+                        $('#jwt-token').val(data.token);
+                        $('#jwt-token-div').fadeIn("slow");
+                        var clipboard = new Clipboard('.copy-btn-jwt');
+                        clipboard.on('success', function (e) {
+                            var $toastContent = $('<span>Token has been copied to clipboard.</span>');
+                            Materialize.toast($toastContent, 3000);
+                            e.clearSelection();
+                        })
+                    },
+                    failure: function (data) {
+                        console.error('Got an error dude!');
+                    }
+                });
+            })
         });
     </script>
 {% endblock %}
@@ -75,7 +97,7 @@
         <h2>Request auth token</h2>
         <ul class="collapsible" data-collapsible="accordion">
             <li>
-                <div class="collapsible-header"><i class="material-icons">filter_drama</i>Regular Token</div>
+                <div class="collapsible-header"><i class="material-icons">filter_drama</i>Basic Token</div>
                 <div class="collapsible-body">
                     {% csrf_token %}
                     <button class="btn waves-effect waves-light" id="token-request-submit" name="action">
@@ -93,8 +115,22 @@
                 </div>
             </li>
             <li>
-                <div class="collapsible-header"><i class="material-icons">place</i>JSON Web Token</div>
-                <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+                <div class="collapsible-header"><i class="material-icons">place</i>JWT Token</div>
+                <div class="collapsible-body">
+                    {% csrf_token %}
+                    <button class="btn waves-effect waves-light" id="jwt-token-request-submit" name="action">
+                        Get Token <i class="material-icons right">send</i>
+                    </button>
+                    <div id="jwt-token-div" class="row fade-in-div">
+                        <input id="jwt-token" class="col s10" type="text" value="">
+                        <span class="input-group-button col s2">
+                            <button class="btn copy-btn-jwt" type="button" data-clipboard-target="#jwt-token">
+                            <img class="clippy" src="{% static "images/clippy.svg" %}" width="13"
+                                 alt="Copy to clipboard">
+                            </button>
+                        </span>
+                    </div>
+                </div>
             </li>
         </ul>
         {% if request.user.username == 'admin' %}
