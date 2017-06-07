@@ -34,10 +34,8 @@ def signup(request):
 @login_required
 def createBasicApiToken(request):
     if request.is_ajax() and request.method == 'POST':
-        #token = Token.objects.get(user=request.user)
-        #if not token:
-        token = Token.objects.create(user=request.user)
-        return JsonResponse(data={'token': token.key})
+        token = Token.objects.get_or_create(user=request.user)
+        return JsonResponse(data={'token': token[0].key, 'isCreated': token[1]})
     else:
         return redirect('/')
 
