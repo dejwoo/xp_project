@@ -88,7 +88,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class SwarmSerializer(serializers.ModelSerializer):
-    nodes = serializers.PrimaryKeyRelatedField(many=True, queryset=Node.objects.all())
+    nodes = serializers.PrimaryKeyRelatedField(many=False, queryset=Node.objects.all())
     user = serializers.SerializerMethodField()
 
     def get_user(self, obj):
@@ -113,9 +113,9 @@ class SwarmSerializer(serializers.ModelSerializer):
 
 
 class MessageSerializer(serializers.ModelSerializer):
-    node = serializers.PrimaryKeyRelatedField(many=True, queryset=Node.objects.all())
-    rxInfo = serializers.PrimaryKeyRelatedField(many=True, queryset=RxInfo.objects.all())
-    txInfo = serializers.PrimaryKeyRelatedField(many=True, queryset=TxInfo.objects.all())
+    node = serializers.PrimaryKeyRelatedField(many=False, queryset=Node.objects.all())
+    rxInfo = serializers.PrimaryKeyRelatedField(many=False, queryset=RxInfo.objects.all())
+    txInfo = serializers.PrimaryKeyRelatedField(many=False, queryset=TxInfo.objects.all())
 
     class Meta:
         model = Message
@@ -123,7 +123,7 @@ class MessageSerializer(serializers.ModelSerializer):
 
 
 class RxInfoSerializer(serializers.ModelSerializer):
-    gateway = serializers.PrimaryKeyRelatedField(many=True, queryset=Gateway.objects.all())
+    gateway = serializers.PrimaryKeyRelatedField(many=False, queryset=Gateway.objects.all())
 
     class Meta:
         model = RxInfo
