@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import Permission
 from apps.api.models import User, Gateway, Node, Swarm, RxInfo, TxInfo, Message
-from  datetime import datetime
+from django.utils import timezone
 
 
 class GatewaySerializer(serializers.HyperlinkedModelSerializer):
@@ -16,7 +16,7 @@ class GatewaySerializer(serializers.HyperlinkedModelSerializer):
         instance.gps_lon = validated_data.get('gps_lon', instance.gps_lon)
         instance.mac = validated_data.get('mac', instance.mac)
         instance.serial = validated_data.get('serial', instance.serial)
-        instance.last_seen = datetime.now()
+        instance.last_seen = timezone.now()
         instance.user = User.objects.get(id=self.context['request'].user.id)
         instance.save()
         return instance
@@ -45,7 +45,7 @@ class NodeSerializer(serializers.HyperlinkedModelSerializer):
         instance.type = validated_data.get('type', instance.type)
         instance.name = validated_data.get('name', instance.name)
         instance.last_gateway = None
-        instance.last_seen = datetime.now()
+        instance.last_seen = timezone.now()
         instance.user = User.objects.get(id=self.context['request'].user.id)
         instance.save()
         return instance

@@ -79,21 +79,6 @@ class Message(models.Model):
     def __str__(self):
         return str(self.__dict__)
 
-
-@receiver(post_save, sender=Message, dispatch_uid='save_new_message')
-def save_profile(sender, instance, created, **kwargs):
-    if created:
-        gateway = Gateway(gps_lat=instance.rxInfo.latitude,
-                          gps_lon=instance.rxInfo.longitude,
-                          serial=instance.rxInfo.gatwayName,
-                          mac=instance.rxInfo.gatwayMac)
-        gateway.save()
-        print(gateway)
-
-    def __str__(self):
-        return str(self.__dict__)
-
-
 # "rxInfo": [
 #     {
 #       "altitude": 1845,
