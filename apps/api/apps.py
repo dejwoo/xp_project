@@ -26,7 +26,7 @@ class ApiConfig(AppConfig):
             print("apps.api.mqtt_client::on_message_recieved: Node UUID does not exists!")
             return
         newRxInfo = self.RxInfo(loRaSNR=rxInfo['loRaSNR'], latitude=rxInfo['latitude'], altitude=rxInfo['altitude'],
-                                longitude=rxInfo['longitude'], gatwayMac=rxInfo['mac'], gatwayName=rxInfo['name'],
+                                longitude=rxInfo['longitude'], gatewayMac=rxInfo['mac'], gatewayName=rxInfo['name'],
                                 time=rxInfo['time'], rssi=rxInfo['rssi'])
         newTxInfo = self.TxInfo(adr=txInfo['adr'], codeRate=txInfo['codeRate'],
                                 bandwidth=txInfo['dataRate']['bandwidth'],
