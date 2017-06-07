@@ -54,6 +54,8 @@ DEFAULT_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_extensions',
+    'rest_framework_filters',
+
     "apps.api",
     "apps.web"
 ]
@@ -115,8 +117,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-      'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticated',
     ),
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
     'PAGE_SIZE': 10,
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
