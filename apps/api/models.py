@@ -8,7 +8,7 @@ class User(AbstractUser):
     id = models.AutoField(primary_key=True)
     company = models.CharField(max_length=100)
     def __str__(self):
-        return str(self.__dict__)
+        return str(self.username)
 
 
 class Gateway(models.Model):
@@ -28,7 +28,7 @@ class Node(models.Model):
     app_key = models.CharField(max_length=100)
     dev_addr = models.CharField(max_length=100)
     dev_eui = models.UUIDField()
-    last_gateway = models.ForeignKey(Gateway)
+    last_gateway = models.ForeignKey(Gateway, null=True, blank=True)
     last_seen = models.DateTimeField()
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=100)

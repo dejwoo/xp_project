@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import Permission
 from apps.api.models import User, Gateway, Node, Swarm, RxInfo, TxInfo, Message
-
+from  datetime import datetime
 
 class GatewaySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -11,10 +11,30 @@ class GatewaySerializer(serializers.HyperlinkedModelSerializer):
 
 class NodeSerializer(serializers.HyperlinkedModelSerializer):
     last_gateway = serializers.HyperlinkedRelatedField(many=True, view_name='gateways-detail', read_only=True)
-
+    user = serializers.SerializerMethodField()
+    def get_user(self, obj):
+        return self.context['request'].user.id
     class Meta:
         model = Node
-        fields = '__all__'
+        fields = ('app_eui','app_key','dev_addr','dev_eui','last_gateway','last_seen','name','type', 'user')
+    def update(self, instance, validated_data):
+        instance.app_eui = validated_data.get('app_eui', instance.app_eui)
+        instance.app_key = validated_data.get('app_key', instance.app_key)
+        instance.dev_addr = validated_data.get('dev_addr', instance.dev_addr)
+        instance.dev_eui = validated_data.get('dev_eui', instance.dev_eui)
+        instance.type = validated_data.get('type', instance.type)
+        instance.name = validated_data.get('name', instance.name)
+        instance.last_gateway = None
+        instance.last_seen = datetime.now()
+        instance.user = User.objects.get(id=self.context['request'].user.id)
+        instance.save()
+        return instance
+
+    def create(self, validated_data):
+        print("CREATE NODE", validated_data)
+        print("CREATE NODE CONTEXT", self.context)
+        validated_data['user'] = User.objects.get(id=self.context['request'].user.id)
+        return Node.objects.create(**validated_data)
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):

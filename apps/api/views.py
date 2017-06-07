@@ -1,9 +1,11 @@
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework import viewsets, generics, permissions
+from rest_framework import viewsets, generics, permissions, status
+from rest_framework.response import Response
+
 from apps.api.permissions import IsStaffOrTargetUser, IsOwnerOrReadOnly
 from apps.api.models import *
 from apps.api.serializers import UserSerializer, GatewaySerializer, NodeSerializer, SwarmSerializer
-
+from django.http import HttpResponseBadRequest
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -32,7 +34,7 @@ class GatewayListViewSet(viewsets.ModelViewSet):
         if self.request.user.is_staff:
             return Gateway.objects.all()
         else:
-            return Gateway.objects.get(user__id=self.request.user.id)
+            return Gateway.objects.filter(user__id=self.request.user.id)
 
 
 class NodeListViewSet(viewsets.ModelViewSet):
@@ -43,8 +45,13 @@ class NodeListViewSet(viewsets.ModelViewSet):
         if self.request.user.is_staff:
             return Node.objects.all()
         else:
-            return Node.objects.get(user_id=self.request.user.id)
-
+            return Node.objects.filter(user=self.request.user)
+    def create(self, request, *args, **kwargs):
+        serializer = NodeSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SwarmListViewSet(viewsets.ModelViewSet):
     serializer_class = SwarmSerializer
@@ -54,4 +61,4 @@ class SwarmListViewSet(viewsets.ModelViewSet):
         if self.request.user.is_staff:
             return Swarm.objects.all()
         else:
-            return Swarm.objects.get(user_id=self.request.user.id)
+            return Swarm.objects.filter(user_id=self.request.user.id)
