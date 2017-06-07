@@ -16,7 +16,7 @@ class MqttClient(object):
         self.signal_count = False
         self.client.username_pw_set(username=os.environ.get("MQTT_USERNAME"), password=os.environ.get("MQTT_PASSWORD"))
         self.client.connect_async(os.environ.get("MQTT_HOST"), int(os.environ.get("MQTT_PORT")), int(os.environ.get("MQTT_KEEPALIVE")))
-        self.client.loop_start();
+        self.client.loop_start()
     def getSignal(self):
         return self.signal
 

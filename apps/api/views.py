@@ -1,75 +1,71 @@
-from django.http import Http404
-from rest_framework.authentication import BasicAuthentication, SessionAuthentication
-from rest_framework.decorators import detail_route, list_route, api_view, permission_classes
-from rest_framework.generics import CreateAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
-from rest_framework.renderers import TemplateHTMLRenderer
-from rest_framework.response import Response
-from rest_framework import viewsets, status, mixins, generics, permissions
-from rest_framework.reverse import reverse
-from rest_framework.views import APIView
-from apps.api.permissions import IsStaffOrTargetUser, IsOwnerOrReadOnly, IsOwner
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework import viewsets, generics, permissions
+from apps.api.permissions import IsStaffOrTargetUser, IsOwnerOrReadOnly
 from apps.api.models import *
 from apps.api.serializers import UserSerializer, GatewaySerializer, NodeSerializer, SwarmSerializer
-from rest_framework_jwt.views import obtain_jwt_token
 
 
 class UserViewSet(viewsets.ModelViewSet):
     """
     A simple ViewSet for viewing and editing accounts.
     """
-    queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (IsAdminUser,)
+    permission_classes = (IsAuthenticated,)# + (IsStaffOrTargetUser, )
 
-    @detail_route(methods=['get', 'delete', 'post'])
-    @permission_classes([IsAdminUser, IsOwner])
-    def data(self, request, pk=None):
-        permission_classes = (IsOwner, IsAdminUser,)
-        user = self.get_object()
-        return Response(serializer.data)
+    def get_queryset(self):
+        """
+        Filter objects so a user only sees his own stuff.
+        If user is admin, let him see all.
+        """
+        if self.request.user.is_staff:
+            return User.objects.all()
+        else:
+            return User.objects.filter(id=self.request.user.id)
 
-    @list_route(methods=['get', 'delete', 'post'])
-    @permission_classes([IsAdminUser])
-    def data(self, request):
-        return Response(serializer.data)
 
 class GatewayListViewSet(viewsets.ModelViewSet):
-    queryset = Gateway.objects.all()
     serializer_class = GatewaySerializer
-    permission_classes = (AllowAny, permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
 
-    #def list(self, request, *args, **kwargs):
-    #    return super().list(request, *args, **kwargs)
+    def get_queryset(self):
+        if self.request.user.is_staff or self.request.user.gateways == None:
+            return Gateway.objects.all()
+        else:
+            return self.request.user.gateways.all()
 
 
 class GatewayDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Gateway.objects.all()
     serializer_class = GatewaySerializer
-    permission_classes = (AllowAny, permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly,)
+    permission_classes = (IsStaffOrTargetUser, IsAuthenticated)
 
 
 class NodeListViewSet(viewsets.ModelViewSet):
-    queryset = Node.objects.all()
     serializer_class = NodeSerializer
-    permission_classes = (AllowAny, permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly,)
+    permission_classes = (IsAuthenticated, )
+
+    def get_queryset(self):
+        if self.request.user.is_staff or self.request.user.nodes == None:
+            return Node.objects.all()
+        else:
+            return self.request.user.nodes.all()
 
 
 class NodeDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Node.objects.all()
     serializer_class = NodeSerializer
-    permission_classes = (AllowAny, permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly,)
+    permission_classes = (IsStaffOrTargetUser, IsAuthenticated)
 
 
 class SwarmListViewSet(viewsets.ModelViewSet):
-    queryset = Swarm.objects.all()
     serializer_class = SwarmSerializer
-    permission_classes = (AllowAny, permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        if self.request.user.is_staff or self.request.user.gateways == None:
+            return Swarm.objects.all()
+        else:
+            return self.request.user.nodes.all()
 
 
 class SwarmDetailView(generics.RetrieveUpdateDestroyAPIView):

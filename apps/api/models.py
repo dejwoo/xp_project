@@ -3,19 +3,22 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import AbstractUser
 
+
 class User(AbstractUser):
     id = models.AutoField(primary_key=True)
     company = models.CharField(max_length=100)
     gateways = models.ForeignKey('api.Gateway', blank=True, null=True)
     nodes = models.ForeignKey('api.Node', blank=True, null=True)
+
     def __str__(self):
         return str(self.__dict__)
 
+
 class Gateway(models.Model):
-    gps_lat = models.FloatField()
-    gps_lon = models.FloatField()
-    last_seen = models.CharField(max_length=100)
-    mac = models.CharField(max_length=100)
+    gps_lat = models.DecimalField(max_digits=11, decimal_places=8)
+    gps_lon = models.DecimalField(max_digits=11, decimal_places=8)
+    last_seen = models.DateTimeField()
+    mac = models.UUIDField()
     serial = models.CharField(max_length=100)
 
     def __str__(self):
@@ -23,10 +26,10 @@ class Gateway(models.Model):
 
 
 class Node(models.Model):
-    app_eui = models.CharField(max_length=100)
+    app_eui = models.UUIDField()
     app_key = models.CharField(max_length=100)
     dev_addr = models.CharField(max_length=100)
-    dev_eui = models.CharField(max_length=100)
+    dev_eui = models.UUIDField()
     last_gateway = models.ForeignKey(Gateway)
     last_seen = models.DateTimeField()
     name = models.CharField(max_length=100)
@@ -101,9 +104,9 @@ def save_profile(sender, instance, created, **kwargs):
 #   ],
 class RxInfo(models.Model):
     altitude = models.IntegerField()
-    latitude = models.FloatField()
+    latitude = models.DecimalField(max_digits=11, decimal_places=8)
+    longitude = models.DecimalField(max_digits=11, decimal_places=8)
     loRaSNR = models.IntegerField()
-    longitude = models.FloatField()
     gateway = models.ForeignKey(Gateway, blank=True, null=True)
     gatwayMac = models.UUIDField()
     gatwayName = models.CharField(max_length=100)
