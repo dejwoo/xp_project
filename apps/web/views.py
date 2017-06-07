@@ -38,6 +38,7 @@ def createBasicApiToken(request):
         return JsonResponse(data={'token': token[0].key, 'isCreated': token[1]})
     else:
         return redirect('/')
+
 @login_required
 def createJwtApiToken(request):
     jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER

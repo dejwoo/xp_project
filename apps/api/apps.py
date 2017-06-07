@@ -18,9 +18,9 @@ class ApiConfig(AppConfig):
         self.Gateway = self.get_model('Gateway')
         self.User = self.get_model('User')
         Signal.connect(self.mqtt.getSignal(),receiver=self.on_message_recieved, weak=False, dispatch_uid="dd5e8bfe-ea9b-42a3-a595-4810d0987650")
-        # self.init_nodes()
-        # self.init_gateways()
-        return
+        self.init_nodes()
+        self.init_gateways()
+
     def init_nodes(self):
         self.node_types = ['temperature-sensor', 'wind-sensor', 'humidity-sensor']
         for uuid in ['230369c8-813b-4cf9-9fc2-59c9ec4246bf','904d546c-3506-484c-8836-d67a737e72f9','dd973483-2367-4ae5-96ff-663a94020342','60330a45-24b9-4be4-94df-7e8df2bf9dd0','d828a4a9-f1cb-4283-b16b-f35acc3bef55','52cf0c28-dd70-4f16-ace3-e447174d7e13','8700ef72-efb6-4494-b9d7-cfb1abfede8c','fa9c6e93-083e-4ab2-bf13-1e1235a3d562','b9946be6-7046-414d-9f75-1c7db7431669','c63e2b8c-3ba9-4cc8-8b2e-044e4f80a11e']:
