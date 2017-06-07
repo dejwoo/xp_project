@@ -4,7 +4,6 @@ from apps.api.models import User, Gateway, Node, Swarm, RxInfo, TxInfo, Message
 
 
 class GatewaySerializer(serializers.HyperlinkedModelSerializer):
-
     class Meta:
         model = Gateway
         fields = '__all__'
@@ -28,7 +27,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         instance.nodes = validated_data.get('nodes', instance.nodes)
         instance.save()
         return instance
-      
+
     def create(self, validated_data):
         if not validated_data['groups']:
             validated_data.pop('groups')
@@ -47,13 +46,14 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         #             gateways = validated_data['gateways'],
         #             nodes = validated_data['nodes'])
         return User.objects.create(**validated_data)
-      
+
     class Meta:
         model = User
-        fields = '__all__'
+        fields = (
+        'url', 'gateways', 'nodes', 'last_login', 'username', 'first_name', 'last_name', 'email', 'last_login',
+        'date_joined', 'company', 'groups')
         gateways = GatewaySerializer(required=False, many=True)
         nodes = NodeSerializer(required=False, many=True)
-
 
 
 class SwarmSerializer(serializers.ModelSerializer):
