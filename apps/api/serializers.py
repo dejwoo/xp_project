@@ -4,9 +4,25 @@ from apps.api.models import User, Gateway, Node, Swarm, RxInfo, TxInfo, Message
 from  datetime import datetime
 
 class GatewaySerializer(serializers.HyperlinkedModelSerializer):
+    user = serializers.SerializerMethodField()
+    def get_user(self, obj):
+        return self.context['request'].user.id
     class Meta:
         model = Gateway
         fields = '__all__'
+    def update(self, instance, validated_data):
+        instance.gps_lat = validated_data.get('gps_lat', instance.gps_lat)
+        instance.gps_lon = validated_data.get('gps_lon', instance.gps_lon)
+        instance.mac = validated_data.get('mac', instance.mac)
+        instance.serial = validated_data.get('serial', instance.serial)
+        instance.last_seen = datetime.now()
+        instance.user = User.objects.get(id=self.context['request'].user.id)
+        instance.save()
+        return instance
+
+    def create(self, validated_data):
+        validated_data['user'] = User.objects.get(id=self.context['request'].user.id)
+        return Gateway.objects.create(**validated_data)
 
 
 class NodeSerializer(serializers.HyperlinkedModelSerializer):
