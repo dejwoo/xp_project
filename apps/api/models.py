@@ -4,20 +4,24 @@ from django.dispatch import receiver
 from django.contrib.auth.models import AbstractUser
 from  datetime import datetime
 
+
 class User(AbstractUser):
     id = models.AutoField(primary_key=True)
-    company = models.CharField(max_length=100)
+    company = models.CharField(max_length=100, help_text="Company Name")
+
     def __str__(self):
         return str(self.username)
 
 
 class Gateway(models.Model):
-    gps_lat = models.DecimalField(max_digits=11, decimal_places=8)
-    gps_lon = models.DecimalField(max_digits=11, decimal_places=8)
+    gps_lat = models.DecimalField(max_digits=11, decimal_places=8, help_text=
+    'Latitudinal coordinate of the gateway.')
+    gps_lon = models.DecimalField(max_digits=11, decimal_places=8, help_text=
+    'Longitudinal coordinate of the gateway.')
     last_seen = models.DateTimeField(default=datetime.now())
-    mac = models.UUIDField()
+    mac = models.UUIDField(help_text="The device's MAC address.")
     user = models.ForeignKey(User, null=False)
-    serial = models.CharField(max_length=100)
+    serial = models.CharField(max_length=100, help_text="The device's serial number")
 
     def __str__(self):
         return str(self.__dict__)
