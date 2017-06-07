@@ -30,6 +30,81 @@ class UsersTest(APITestCase):
 		self.assertEqual(User.objects.count(), 1)
 		self.assertEqual(User.objects.get().username, 'username_testovacieho_usera')
 
+	def test_get_user_list(self):
+
+		user =User.objects.create(username="test", email="test@test.sk", password="test12345", company="test s.r.o")
+		self.client.force_authenticate(user=user)
+		valid_response = {
+		  "url": "http://testserver/api/users/"+str(user.id)+"/",
+		  "username": "test",
+		  "email": "test@test.sk",
+		  "date_joined": "2017-06-07T14:11:02.220673Z",
+		  "company": "test s.r.o",
+		}
+		url = reverse('user-list')
+		response = self.client.get(url)
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		result_to_compare = dict(response.data['results'][0])
+		self.assertEqual(result_to_compare['url'], valid_response['url'])
+		self.assertEqual(result_to_compare['username'], valid_response['username'])
+		self.assertEqual(result_to_compare['email'], valid_response['email'])
+		self.assertEqual(result_to_compare['company'], valid_response['company'])
+
+	def test_get_user_detail(self):
+
+		user =User.objects.create(username="test", email="test@test.sk", password="test12345", company="test s.r.o")
+		self.client.force_authenticate(user=user)
+		valid_response = {
+		  "url": "http://testserver/api/users/"+str(user.id)+"/",
+		  "username": "test",
+		  "email": "test@test.sk",
+		  "date_joined": "2017-06-07T14:11:02.220673Z",
+		  "company": "test s.r.o",
+		}
+		url = reverse('user-detail',args=[user.id])
+		response = self.client.get(url)
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		self.assertEqual(response.data['url'], valid_response['url'])
+		self.assertEqual(response.data['username'], valid_response['username'])
+		self.assertEqual(response.data['email'], valid_response['email'])
+		self.assertEqual(response.data['company'], valid_response['company'])
+
+	def test_delete_user_detail(self):
+		user =User.objects.create(username="test", email="test@test.sk", password="test12345", company="test s.r.o")
+		self.client.force_authenticate(user=user)
+		valid_response = {
+		  "url": "http://testserver/api/users/"+str(user.id)+"/",
+		  "username": "test",
+		  "email": "test@test.sk",
+		  "date_joined": "2017-06-07T14:11:02.220673Z",
+		  "company": "test s.r.o",
+		}
+		url = reverse('user-detail',args=[user.id])
+		response = self.client.delete(url)
+		self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+		self.assertEqual(response.data, None)
+
+	def test_patch_user_detail(self):
+		user =User.objects.create(username="test", email="test@test.sk", password="test12345", company="test s.r.o")
+		self.client.force_authenticate(user=user)
+		valid_response = {
+		  "url": "http://testserver/api/users/"+str(user.id)+"/",
+		  "username": "test_patched",
+		  "email": "test@test.sk",
+		  "date_joined": "2017-06-07T14:11:02.220673Z",
+		  "company": "test s.r.o",
+		}
+		url = reverse('user-detail',args=[user.id])
+		response = self.client.patch(url, valid_response)
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		self.assertEqual(response.data['url'], valid_response['url'])
+		self.assertEqual(User.objects.get().username, 'test_patched')
+		self.assertEqual(response.data['username'], valid_response['username'])
+		self.assertEqual(response.data['email'], valid_response['email'])
+		self.assertEqual(response.data['company'], valid_response['company'])
+		self.assertEqual(User.objects.count(), 1)
+
+
 class NodesTests(APITestCase):
 	def __init__(self, *args, **kwargs):
 		APITestCase.__init__(self, *args, **kwargs)
