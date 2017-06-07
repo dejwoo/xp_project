@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import AbstractUser
-from  datetime import datetime
+from django.utils import timezone
 
 
 class User(AbstractUser):
@@ -18,7 +18,7 @@ class Gateway(models.Model):
     'Latitudinal coordinate of the gateway.')
     gps_lon = models.DecimalField(max_digits=11, decimal_places=8, help_text=
     'Longitudinal coordinate of the gateway.')
-    last_seen = models.DateTimeField(default=datetime.now())
+    last_seen = models.DateTimeField(default=timezone.now())
     mac = models.UUIDField(help_text="The device's MAC address.")
     user = models.ForeignKey(User, null=False)
     serial = models.CharField(max_length=100, help_text="The device's serial number")
@@ -33,7 +33,7 @@ class Node(models.Model):
     dev_addr = models.CharField(max_length=100)
     dev_eui = models.UUIDField()
     last_gateway = models.ForeignKey(Gateway, null=True, blank=True)
-    last_seen = models.DateTimeField(default=datetime.now())
+    last_seen = models.DateTimeField(default=timezone.now())
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=100)
     user = models.ForeignKey(User, null=False)
