@@ -24,10 +24,7 @@ class GatewayListViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return Gateway.objects.all()
-        else:
-            return Gateway.objects.filter(user=self.request.user)
+        return Gateway.objects.all()
 
     def create(self, request, *args, **kwargs):
         serializer = GatewaySerializer(data=request.data, context={'request': request})
