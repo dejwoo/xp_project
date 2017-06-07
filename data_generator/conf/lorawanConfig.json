@@ -6,10 +6,12 @@
     "producers": [
     	{
     		"type": "mqtt",
-    		"broker.server": "tcp://dejwoo.com",
-   			"broker.port": 13881,
+    		"broker.server": "tcp://lorawan.project-noe.org",
+   			"broker.port": 1883,
     		"topic": "data",
     		"clientId": "SampleData",
-    		"qos":0
+    		"qos":0,
+            "username": "project_noe",
+            "password": "arOMEtrOpOlongmArtHmarYdRAnTOp"
     	}]
 }

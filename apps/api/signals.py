@@ -22,7 +22,7 @@ class MqttClient(object):
 
 
     def on_connect(self, client, userdata, flags, rc):
-        print("Connected to dejwoo.com")
+        print("Connected to ", os.environ.get("MQTT_HOST"))
         client.subscribe('data')
 
     def on_message(self, client, userdata, message):

@@ -14,10 +14,18 @@ class ApiConfig(AppConfig):
         self.Message = self.get_model('Message')
         self.TxInfo = self.get_model('TxInfo')
         self.RxInfo = self.get_model('RxInfo')
+        self.Node = self.get_model('Node')
+        self.Gateway = self.get_model('Gateway')
         Signal.connect(self.mqtt.getSignal(),receiver=self.on_message_recieved, weak=False, dispatch_uid="dd5e8bfe-ea9b-42a3-a595-4810d0987650")
         return
 
     def on_message_recieved(self, sender, message, txInfo, rxInfo, **kwargs):
+        if not self.Gateway.objects.filter(mac=rxInfo['mac']).exists():
+            print("apps.api.mqtt_client::on_message_recieved: Gateway UUID does not exists!")
+            return
+        if not self.Node.objects.filter(devEUI=message['devEUI']).exists():
+            print("apps.api.mqtt_client::on_message_recieved: Node UUID does not exists!")
+            return
         newRxInfo = self.RxInfo(loRaSNR= rxInfo['loRaSNR'],
                                 latitude= rxInfo['latitude'],
                                 altitude= rxInfo['altitude'],
