@@ -119,6 +119,7 @@ class MessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Message
+        fields ='__all__'
 
 
 class RxInfoSerializer(serializers.ModelSerializer):
@@ -126,8 +127,10 @@ class RxInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RxInfo
+        fields = '__all__'
 
 
 class TxInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = TxInfo
+        fields = '__all__'
