@@ -7,9 +7,6 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     id = models.AutoField(primary_key=True)
     company = models.CharField(max_length=100)
-    gateways = models.ForeignKey('api.Gateway', blank=True, null=True)
-    nodes = models.ForeignKey('api.Node', blank=True, null=True)
-
     def __str__(self):
         return str(self.__dict__)
 
@@ -19,6 +16,7 @@ class Gateway(models.Model):
     gps_lon = models.DecimalField(max_digits=11, decimal_places=8)
     last_seen = models.DateTimeField()
     mac = models.UUIDField()
+    user = models.ForeignKey(User, null=False)
     serial = models.CharField(max_length=100)
 
     def __str__(self):
@@ -34,6 +32,7 @@ class Node(models.Model):
     last_seen = models.DateTimeField()
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=100)
+    user = models.ForeignKey(User, null=False)
 
     def __str__(self):
         return str(self.__dict__)
@@ -44,6 +43,7 @@ class Swarm(models.Model):
     last_seen = models.DateTimeField()
     name = models.CharField(max_length=100)
     nodes = models.ForeignKey(Node)
+    user = models.ForeignKey(User, null=False)
 
     def __str__(self):
         return str(self.__dict__)

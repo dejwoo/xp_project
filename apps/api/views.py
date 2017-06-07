@@ -28,16 +28,11 @@ class GatewayListViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        if self.request.user.is_staff or self.request.user.gateways == None:
+        print(Gateway.objects.all())
+        if self.request.user.is_staff:
             return Gateway.objects.all()
         else:
-            return self.request.user.gateways.all()
-
-
-class GatewayDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Gateway.objects.all()
-    serializer_class = GatewaySerializer
-    permission_classes = (IsStaffOrTargetUser, IsAuthenticated)
+            return Gateway.objects.get(user__id=self.request.user.id)
 
 
 class NodeListViewSet(viewsets.ModelViewSet):
@@ -45,16 +40,10 @@ class NodeListViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, )
 
     def get_queryset(self):
-        if self.request.user.is_staff or self.request.user.nodes == None:
+        if self.request.user.is_staff:
             return Node.objects.all()
         else:
-            return self.request.user.nodes.all()
-
-
-class NodeDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Node.objects.all()
-    serializer_class = NodeSerializer
-    permission_classes = (IsStaffOrTargetUser, IsAuthenticated)
+            return Node.objects.get(user_id=self.request.user.id)
 
 
 class SwarmListViewSet(viewsets.ModelViewSet):
@@ -62,14 +51,7 @@ class SwarmListViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        if self.request.user.is_staff or self.request.user.gateways == None:
+        if self.request.user.is_staff:
             return Swarm.objects.all()
         else:
-            return self.request.user.nodes.all()
-
-
-class SwarmDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Swarm.objects.all()
-    serializer_class = SwarmSerializer
-    permission_classes = (AllowAny, permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly,)
+            return Swarm.objects.get(user_id=self.request.user.id)

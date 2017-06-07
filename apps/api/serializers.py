@@ -18,13 +18,9 @@ class NodeSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    gateways = serializers.HyperlinkedRelatedField(many=True, view_name='gateways-detail', read_only=True)
-    nodes = serializers.HyperlinkedRelatedField(many=True, view_name='nodes-detail', read_only=True)
 
     def update(self, instance, validated_data):
         instance.company = validated_data.get('company', instance.company)
-        instance.gateways = validated_data.get('gateways', instance.gateways)
-        instance.nodes = validated_data.get('nodes', instance.nodes)
         instance.save()
         return instance
 
@@ -50,10 +46,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = (
-        'url', 'gateways', 'nodes', 'last_login', 'username', 'first_name', 'last_name', 'email', 'last_login',
+        'url', 'last_login', 'username', 'first_name', 'last_name', 'email', 'last_login',
         'date_joined', 'company', 'groups')
-        gateways = GatewaySerializer(required=False, many=True)
-        nodes = NodeSerializer(required=False, many=True)
 
 
 class SwarmSerializer(serializers.ModelSerializer):
