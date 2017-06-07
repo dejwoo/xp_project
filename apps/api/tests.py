@@ -14,18 +14,21 @@ class UsersTest(APITestCase):
 		Ensure we can create a new account object.
 		"""
 		url = reverse('signup')
+		response = self.client.get(url)
+		assert response.status_code == 200
+		csrftoken = response.cookies['csrftoken']
 		data = {
-			"username":"test312312",
+			"username":"username_testovacieho_usera",
 			"email":"test@test.sk",
 			"password1":"test12345",
 			"password2":"test12345",
 			"company":"test s.r.o"
 		}
-		response = self.client.post(url, data, format='multipart')
-		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+		response = self.client.post(url, data, headers={'X-CSRFToken': csrftoken}, format='multipart')
+		print(response.content)
+		self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 		self.assertEqual(User.objects.count(), 1)
-		self.assertEqual(User.objects.get().username, 'test312312')
-
+		self.assertEqual(User.objects.get().username, 'username_testovacieho_usera')
 
 class NodesTests(APITestCase):
 	def __init__(self, *args, **kwargs):
