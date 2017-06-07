@@ -1,11 +1,13 @@
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.views import generic
 from rest_framework.decorators import api_view
 from django.contrib.auth import login, authenticate, mixins
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
 from apps.web.forms import SignUpForm
 from rest_framework.authtoken.models import Token
+
+from xp_project.settings.common import LOGIN_REDIRECT_URL
 
 
 def index(request):
@@ -23,7 +25,7 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=user.username, password=raw_password)
             login(request, user)
-            return redirect('web/dashboard/')
+            return redirect(LOGIN_REDIRECT_URL)
     else:
         form = SignUpForm()
     return render(request, 'web/sign_up.html', {'form': form})
@@ -31,8 +33,11 @@ def signup(request):
 
 @login_required
 def createBasicApiToken(request):
-    if request.method == 'POST':
-        return JsonResponse(data=Token.objects.create(user=request.user))
+    if request.is_ajax() and request.method == 'POST':
+        #token = Token.objects.get(user=request.user)
+        #if not token:
+        token = Token.objects.create(user=request.user)
+        return JsonResponse(data={'token': token.key})
     else:
         return redirect('/')
 

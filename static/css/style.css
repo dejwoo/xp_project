@@ -13,3 +13,14 @@ nav, footer {
     background-color: #558b2f !important;
 }
 
+.fade-in-div {
+    display: none;
+    margin-top: 25px;
+    font-size: 21px;
+    text-align: center;
+}
+
+.fade-in-div p:hover {
+    background: lightgray;
+    border-radius: 1em;
+}
