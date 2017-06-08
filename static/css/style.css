@@ -24,3 +24,7 @@ nav, footer {
     background: lightgray;
     border-radius: 1em;
 }
+
+.brand-logo{
+    margin-left: 1rem;
+}

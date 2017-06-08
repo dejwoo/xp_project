@@ -95,7 +95,7 @@
 {% block main %}
     <article class="container">
         <h2>Request auth token</h2>
-        <ul class="collapsible" data-collapsible="accordion">
+        <ul class="collapsible" data-collapsible="expandable">
             <li>
                 <div class="collapsible-header"><i class="material-icons">filter_drama</i>Basic Token</div>
                 <div class="collapsible-body">
@@ -104,13 +104,19 @@
                         Get Token <i class="material-icons right">send</i>
                     </button>
                     <div id="basic-token-div" class="row fade-in-div">
-                        <input id="token" class="col s10" type="text" value="">
-                        <span class="input-group-button col s2">
+                        <div class="col s8 s2-push">
+                            <input class="center-align" id="token" type="text" value="" readonly>
+                        </div>
+                        <div class="col s2">
                             <button class="btn copy-btn" type="button" data-clipboard-target="#token">
-                            <img class="clippy" src="{% static "images/clippy.svg" %}" width="13"
-                                 alt="Copy to clipboard">
+                                <i class="material-icons right">content_copy</i> Copy
                             </button>
-                        </span>
+                        </div>
+                        <div class="col s2">
+                            <button class="btn new-btn" type="button">
+                                New&nbsp;Token
+                            </button>
+                        </div>
                     </div>
                 </div>
             </li>
@@ -122,13 +128,20 @@
                         Get Token <i class="material-icons right">send</i>
                     </button>
                     <div id="jwt-token-div" class="row fade-in-div">
-                        <input id="jwt-token" class="col s10" type="text" value="">
-                        <span class="input-group-button col s2">
+                        <div class="col s8 s2-push">
+                            <input class="center-align" id="jwt-token" type="text" value="" readonly>
+                        </div>
+                        <div class="col s2">
                             <button class="btn copy-btn-jwt" type="button" data-clipboard-target="#jwt-token">
-                            <img class="clippy" src="{% static "images/clippy.svg" %}" width="13"
-                                 alt="Copy to clipboard">
+                                <i class="material-icons right">content_copy</i> Copy
                             </button>
-                        </span>
+
+                        </div>
+                        <div class="col s2">
+                            <button class="btn new-btn-jwt" type="button">
+                                New&nbsp;Token
+                            </button>
+                        </div>
                     </div>
                 </div>
             </li>

@@ -36,7 +36,8 @@ class GatewayListViewSet(viewsets.ModelViewSet):
     @detail_route(methods=['get'])
     def data(self, request, pk=None):
         try:
-            messages_trough_gateway = Message.objects.filter(rxInfo__gateway__mac=Gateway.objects.get(id=pk).mac)
+            gateway_mac = Gateway.objects.get(id=pk).mac
+            messages_trough_gateway = Message.objects.filter(rxInfo__gatewayMac=gateway_mac)
         except Exception as e:
             return Response("Gateway not found", status=status.HTTP_404_NOT_FOUND)
         page = self.paginate_queryset(messages_trough_gateway)
